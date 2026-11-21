@@ -140,7 +140,7 @@ in
       {
         name = "settings.autoCompactWindow";
         actual = cfg.settings.autoCompactWindow;
-        expected = "800000";
+        expected = "240000";
       }
       {
         name = "settings.env.CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS";

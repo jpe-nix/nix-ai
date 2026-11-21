@@ -212,12 +212,15 @@ in
         # now; forcing it removed low/medium as real options.
         alwaysThinkingEnabled = false;
 
-        # Compaction fires at window x percent = 800000 x 50% = 400000 tokens
+        # Compaction fires at window x percent = 240000 x 50% = 120000 tokens
         # (Claude Code caps the window at the model's own context window).
         # Both are curated options; don't also set the raw env vars.
         autoCompactThresholdPercent = lib.mkDefault 50;
-        autoCompactWindow = lib.mkDefault "800000";
+        autoCompactWindow = lib.mkDefault "240000";
         cleanupPeriodDays = 180;
+        # Lessons live in the shared, git-tracked agent instructions that every
+        # CLI reads, not in Claude's per-machine memory directory.
+        autoMemoryEnabled = false;
         # A repository's `.mcp.json` written by `agent-skill-groups link` only
         # ever names catalog servers from the on-demand tier, so approve
         # exactly those without the per-project prompt. Anything else in a
