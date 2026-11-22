@@ -14,6 +14,8 @@ dependencies = [
   "mlx-lm==0.32.2",
   # renovate: datasource=git-refs depName=https://github.com/Blaizzy/mlx-vlm packageName=https://github.com/Blaizzy/mlx-vlm currentValue=main extractVersion=^(?<version>.*)$
   "mlx-vlm @ https://github.com/Blaizzy/mlx-vlm/archive/d998a6207b7dc613b52618646dbea13a4799f7ca.zip",
+  # renovate: datasource=pypi depName=mlx-audio
+  "mlx-audio==0.6.5",
   "transformers==5.22.1",
   "huggingface-hub==1.33.0",
 ]

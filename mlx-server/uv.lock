@@ -827,7 +827,7 @@ cpu = [
 
 [[package]]
 name = "mlx-audio"
-version = "0.6.3"
+version = "0.6.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "huggingface-hub" },
@@ -841,9 +841,9 @@ dependencies = [
     { name = "tqdm" },
     { name = "transformers", extra = ["chat-template"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e8/bb/b7948154fce2ed21c0184407ccdec85ee91f44b4d41c91a625a2877ccaf8/mlx_audio-0.6.3.tar.gz", hash = "sha256:bed9a2801a4d500fd007b046bd0209ddcbe2cb0528a648ee7891486b30909df6", size = 2053047, upload-time = "2026-10-28T17:47:32.284Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b0/b3/ebfe8659f5e08607a3c1bedba42c01f472f7b06cbd859c3809f513c2430b/mlx_audio-0.6.5.tar.gz", hash = "sha256:96e41009b7819c8dfa3a288ebc36c92da83cc5718302a84d26326fa2122ee26c", size = 2165008, upload-time = "2026-11-09T18:53:16.343Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b9/0a/5c948ee1445dcee873335e4821d91188547160e5fd2928400da54950c03a/mlx_audio-0.6.3-py3-none-any.whl", hash = "sha256:2cfaef542f29c0eb0f58bb3823eafbb9acf9df9b01a7f45a9bbf3b4b5d44dab9", size = 2464723, upload-time = "2026-10-28T17:47:30.589Z" },
+    { url = "https://files.pythonhosted.org/packages/69/00/0d91656b0bcb0a323c2c88be7bf2eb516cc7bc999d9574ffc8196ac93a7a/mlx_audio-0.6.5-py3-none-any.whl", hash = "sha256:e4ecd7ac96e501bf0b8e72a9fee7f8411b096ce3ff7ab4b0f48c9424c906f87f", size = 2600060, upload-time = "2026-11-09T18:53:14.607Z" },
 ]
 
 [[package]]
@@ -891,6 +891,7 @@ dependencies = [
     { name = "huggingface-hub" },
     { name = "mlx" },
     { name = "mlx", extra = ["cpu"], marker = "sys_platform == 'linux'" },
+    { name = "mlx-audio" },
     { name = "mlx-lm" },
     { name = "mlx-vlm" },
     { name = "transformers" },
@@ -901,6 +902,7 @@ requires-dist = [
     { name = "huggingface-hub", specifier = "==1.33.0" },
     { name = "mlx", specifier = "==0.32.4" },
     { name = "mlx", extras = ["cpu"], marker = "sys_platform == 'linux'", specifier = "==0.32.4" },
+    { name = "mlx-audio", specifier = "==0.6.5" },
     { name = "mlx-lm", specifier = "==0.32.2" },
     { name = "mlx-vlm", url = "https://github.com/Blaizzy/mlx-vlm/archive/d998a6207b7dc613b52618646dbea13a4799f7ca.zip" },
     { name = "transformers", specifier = "==5.22.1" },
