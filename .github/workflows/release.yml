@@ -8,6 +8,11 @@ on:
 
 permissions: {}
 
+# Push runs queue one at a time; pull_request runs are unaffected.
+concurrency:
+  group: ${{ github.event_name == 'push' && format('{0}-push', github.workflow) || format('{0}-{1}', github.workflow, github.run_id) }}
+  cancel-in-progress: false
+
 jobs:
   release:
     uses: JacobPEvans/.github/.github/workflows/_release.yml@v1
