@@ -66,6 +66,7 @@ rec {
         cfg.modelMtpProfiles.${modelId} or {
           enable = false;
           drafterModel = null;
+          draftKind = "mtp";
           maxKvTokens = 131072;
           maxNumSeqs = 1;
           tokenQueueTimeoutSeconds = 1800;
@@ -133,14 +134,20 @@ rec {
         "--max-kv-size"
         (toString mtp.maxKvTokens)
       ]
-      ++ lib.optionals mtp.enable [
-        "--draft-model"
-        mtp.drafterModel
-        "--draft-kind"
-        "mtp"
-        "--max-num-seqs"
-        (toString mtp.maxNumSeqs)
-      ]
+      ++ lib.optionals mtp.enable (
+        [
+          "--draft-model"
+          mtp.drafterModel
+        ]
+        ++ lib.optionals (mtp.draftKind != null) [
+          "--draft-kind"
+          mtp.draftKind
+        ]
+        ++ [
+          "--max-num-seqs"
+          (toString mtp.maxNumSeqs)
+        ]
+      )
       ++ lib.optionals (mtp.enable && mtp.draftBlockSize != null) [
         "--draft-block-size"
         (toString mtp.draftBlockSize)
