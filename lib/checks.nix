@@ -322,6 +322,7 @@ in
     hmConfigLitellmLocal
     ;
 })
+// (import ./checks/claude-operating-settings.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/litellm-local-endpoint.nix { inherit pkgs hmConfigLitellmLocal; })
 // (import ./checks/litellm-local-subagents.nix { inherit pkgs hmConfigLitellmSubagents; })
 // (import ./checks/local-router-url.nix {
