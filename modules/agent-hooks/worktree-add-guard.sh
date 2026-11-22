@@ -53,15 +53,14 @@ resolve_repo_dir() {
 }
 
 repository_has_no_remotes() {
-  local repository_dir="$1" remotes
+  local repository_dir="$1"
   [ -n "$repository_dir" ] || return 1
   # A cd or pushd in the command moves git away from the directory checked here.
   [[ "$command" =~ (^|[^[:alnum:]_-])(cd|pushd)[[:space:]] ]] && return 1
-  if remotes="$(git -C "$repository_dir" remote 2>/dev/null)"; then
-    [ -z "$remotes" ]
-  else
-    return 1
-  fi
+  git -C "$repository_dir" rev-parse --git-dir >/dev/null 2>&1 || return 1
+  # A remote counts only when it has a URL: a global remote.<name>.* setting
+  # makes `git remote` list that name in every repository.
+  ! git -C "$repository_dir" config --get-regexp '^remote\..*\.url$' >/dev/null 2>&1
 }
 
 segments="$(printf '%s\n' "$command" | sed -E 's/(&&|\|\||[;|&])/\n/g')"
