@@ -103,6 +103,17 @@ expect_allow "worktree local start in repository without remotes" \
 expect_allow "git -C switch -c in repository without remotes" \
   "$(hook_input "git -C $no_remote_repo switch -c y" "$fixture_root")"
 
+# A global remote setting without a URL does not make a repository remote-backed.
+global_remote_config="$fixture_root/global-remote-config"
+git config --file "$global_remote_config" remote.origin.followRemoteHEAD always
+GIT_CONFIG_GLOBAL="$global_remote_config" expect_allow \
+  "switch -c without remotes, global remote.origin setting" \
+  "$(hook_input 'git switch -c x' "$no_remote_repo")"
+GIT_CONFIG_GLOBAL="$global_remote_config" expect_deny_contains \
+  "switch -c with origin remote, global remote.origin setting" \
+  "$(hook_input "git -C $origin_repo switch -c x" "$fixture_root")" \
+  'origin/<default-branch>'
+
 expect_deny_contains "switch -c after cd, from a repository without remotes" \
   "$(hook_input "cd $origin_repo && git switch -c x" "$no_remote_repo")" \
   'origin/<default-branch>'
