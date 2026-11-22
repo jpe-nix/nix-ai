@@ -146,7 +146,10 @@
   # Codex CLI commands without relying on a live hook denial.
   worktree-add-guard = pkgs.runCommand "check-worktree-add-guard" {
     SRC = src;
-    nativeBuildInputs = [ pkgs.jq ];
+    nativeBuildInputs = [
+      pkgs.git
+      pkgs.jq
+    ];
   } "${pkgs.bash}/bin/bash ${./scripts/worktree-add-guard-test.sh}";
 
   # Checks the quota probe rejects an unusable CLI and preserves quota decisions.
