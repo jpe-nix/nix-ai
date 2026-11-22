@@ -218,6 +218,9 @@ in
         autoCompactThresholdPercent = lib.mkDefault 50;
         autoCompactWindow = lib.mkDefault "800000";
         cleanupPeriodDays = 180;
+        # Lessons live in the shared, git-tracked agent instructions that every
+        # CLI reads, not in Claude's per-machine memory directory.
+        autoMemoryEnabled = false;
         # A repository's `.mcp.json` written by `agent-skill-groups link` only
         # ever names catalog servers from the on-demand tier, so approve
         # exactly those without the per-project prompt. Anything else in a
