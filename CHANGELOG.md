@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.41.0](https://github.com/jpe-nix/nix-ai/compare/v8.40.2...v8.41.0) (2026-11-22)
+
+
+### Features
+
+* **ai-stack:** optional quota feed options for the delegation hook ([#3123](https://github.com/jpe-nix/nix-ai/issues/3123)) ([37cbf77](https://github.com/jpe-nix/nix-ai/commit/37cbf77b4976fb885f3e3301a37ba44cac399a1d))
+
 ## [8.40.2](https://github.com/jpe-nix/nix-ai/compare/v8.40.2...v8.40.2) (2026-11-22)
 
 
