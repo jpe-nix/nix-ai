@@ -76,6 +76,12 @@
   # widened per tool once it is proven.
   AGENT_ROUTE_ZCODE_TOOLS = "zcode cursor-agent";
 }
+// lib.optionalAttrs (aiStack.agentQuotaQueryUrl != null) {
+  AGENT_QUOTA_QUERY_URL = aiStack.agentQuotaQueryUrl;
+}
+// lib.optionalAttrs (aiStack.agentQuotaTokenFile != null) {
+  AGENT_QUOTA_TOKEN_FILE = toString aiStack.agentQuotaTokenFile;
+}
 # Local LiteLLM proxy — route Claude Code through it so subagent-tier work
 # resolves to a role alias upstream instead of a physical model id.
 #

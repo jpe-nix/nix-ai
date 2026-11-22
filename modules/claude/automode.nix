@@ -30,7 +30,7 @@ in
 {
   environment = [
     "$defaults"
-    "Source control: GitHub orgs ${orgsClause}. All public repos under these are trusted to clone, push, branch, and PR-mutate against. Force-push to feature branches is routine; force-push to main is off-limits."
+    "Source control: GitHub orgs ${orgsClause}. All public repos under these are trusted to clone, push, branch, and PR-mutate against. Force-push is off-limits on every branch."
   ]
   ++ lib.optionals (homelab.enable or false) (homelab.environmentRules or [ ]);
 

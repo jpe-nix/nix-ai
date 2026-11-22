@@ -54,6 +54,12 @@ in
       '';
     };
 
+    agentQuotaQueryUrl = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Optional HTTPS metrics query URL for the delegation quota hook.";
+    };
+
     localRouterUrl = lib.mkOption {
       type = lib.types.str;
       readOnly = true;
@@ -90,6 +96,12 @@ in
         Leave null when the consumer already exports the bearer by another
         runtime path and sets `llmEndpointBearerFromEnv`.
       '';
+    };
+
+    agentQuotaTokenFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Optional absolute path to the delegation quota bearer-token file.";
     };
 
     internalDomains = lib.mkOption {
