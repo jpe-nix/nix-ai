@@ -1,5 +1,17 @@
 # Changelog
 
+## [8.41.0](https://github.com/jpe-nix/nix-ai/compare/v8.40.2...v8.41.0) (2026-11-22)
+
+
+### Features
+
+* **ai-stack:** optional quota feed options for the delegation hook ([#3123](https://github.com/jpe-nix/nix-ai/issues/3123)) ([37cbf77](https://github.com/jpe-nix/nix-ai/commit/37cbf77b4976fb885f3e3301a37ba44cac399a1d))
+
+
+### Bug Fixes
+
+* **agent-hooks:** allow local-base branches in a repository with no remote ([#3124](https://github.com/jpe-nix/nix-ai/issues/3124)) ([ef51078](https://github.com/jpe-nix/nix-ai/commit/ef510783373b97e2a7a856db61dd03e317834942))
+
 ## [8.40.2](https://github.com/jpe-nix/nix-ai/compare/v8.41.1...v8.40.2) (2026-11-22)
 
 
