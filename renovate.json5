@@ -60,5 +60,14 @@
       "matchPackageNames": ["omo-ai"],
       "followTag": "beta",
     },
+    {
+      "description": [
+        "Classify jacobpevans-cc-plugins flake input updates as fixes so Release",
+        "Please releases each bump.",
+      ],
+      "matchDepNames": ["jacobpevans-cc-plugins"],
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "deps",
+    },
   ],
 }
