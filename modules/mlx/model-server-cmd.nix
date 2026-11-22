@@ -51,6 +51,17 @@ rec {
             lib.replaceStrings [ "/" ] [ "--" ] modelId
           }/snapshots/${revision}";
       backend = backendFor modelId;
+      # mlx_audio.server has no --model flag and loads the repo id a request names.
+      modelFlag =
+        if backend != "mlx-audio" then
+          [
+            "--model"
+            modelArg
+          ]
+        else if revision == null then
+          [ ]
+        else
+          throw "programs.mlx.modelRevisions.\"${modelId}\": mlx-audio serves the repo id and cannot load a pinned revision.";
       mtp =
         cfg.modelMtpProfiles.${modelId} or {
           enable = false;
@@ -139,12 +150,12 @@ rec {
           mlx-lm = mlxLmFlags;
           mlx-vlm = mlxVlmFlags;
           mlx-vlm-native = mlxVlmNativeFlags;
+          mlx-audio = [ ];
         }
         .${backend};
     in
-    [
-      "--model"
-      modelArg
+    modelFlag
+    ++ [
       "--port"
       (toString port)
       "--host"
