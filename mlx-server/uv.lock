@@ -902,18 +902,19 @@ requires-dist = [
     { name = "mlx", specifier = "==0.32.4" },
     { name = "mlx", extras = ["cpu"], marker = "sys_platform == 'linux'", specifier = "==0.32.4" },
     { name = "mlx-lm", specifier = "==0.32.2" },
-    { name = "mlx-vlm", url = "https://github.com/Blaizzy/mlx-vlm/archive/527c513a0768245644a70266a22126d880767b18.zip" },
+    { name = "mlx-vlm", url = "https://github.com/Blaizzy/mlx-vlm/archive/d998a6207b7dc613b52618646dbea13a4799f7ca.zip" },
     { name = "transformers", specifier = "==5.22.1" },
 ]
 
 [[package]]
 name = "mlx-vlm"
-version = "0.7.11"
-source = { url = "https://github.com/Blaizzy/mlx-vlm/archive/527c513a0768245644a70266a22126d880767b18.zip" }
+version = "0.8.0"
+source = { url = "https://github.com/Blaizzy/mlx-vlm/archive/d998a6207b7dc613b52618646dbea13a4799f7ca.zip" }
 dependencies = [
     { name = "cryptography" },
     { name = "datasets" },
     { name = "fastapi" },
+    { name = "httpx" },
     { name = "jinja2" },
     { name = "llguidance" },
     { name = "miniaudio" },
@@ -931,7 +932,7 @@ dependencies = [
     { name = "uvicorn" },
     { name = "websockets" },
 ]
-sdist = { hash = "sha256:c98528f3e051f75186f16b2ed014eb17d0f29e12a2908726890bb2a84edcf194" }
+sdist = { hash = "sha256:285f2d7f112c781c46a2f3d1435ee81f07739b7cf105599f14d43d1c2d49a1b1" }
 
 [package.metadata]
 requires-dist = [
@@ -940,6 +941,7 @@ requires-dist = [
     { name = "datasets", marker = "extra == 'train'", specifier = ">=2.19.1" },
     { name = "fastapi", specifier = ">=0.95.1" },
     { name = "gradio", marker = "extra == 'ui'", specifier = ">=5.19.0" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "httpx2", marker = "extra == 'test'", specifier = ">=2.0.0,<3" },
     { name = "jinja2", specifier = ">=3.1.0" },
     { name = "llguidance", specifier = ">=1.7.0" },
