@@ -1,4 +1,4 @@
-# Up to three always-loaded MLX resident servers. The catalog owns every model limit,
+# Up to four always-loaded MLX resident servers. The catalog owns every model limit,
 # the generated consumer file and the launch arguments are compiled from it.
 {
   config,
@@ -129,8 +129,8 @@ in
   config = lib.mkIf (cfg.enable && contracts != { }) {
     assertions = [
       {
-        assertion = builtins.length (builtins.attrNames contracts) <= 3;
-        message = "programs.mlx may render at most three static resident model servers.";
+        assertion = builtins.length (builtins.attrNames contracts) <= 4;
+        message = "programs.mlx may render at most four static resident model servers.";
       }
       {
         # Resident weights are wired GPU memory. A standalone limit of 0 means
