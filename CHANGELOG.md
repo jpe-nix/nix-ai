@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.42.0](https://github.com/jpe-nix/nix-ai/compare/v8.41.2...v8.42.0) (2026-11-22)
+
+
+### Features
+
+* **claude:** enable next-ai-drawio from the claude-community marketplace ([#3086](https://github.com/jpe-nix/nix-ai/issues/3086)) ([5d1543a](https://github.com/jpe-nix/nix-ai/commit/5d1543ae071651f3c0a74e4da8fca776ca5d64e4))
+
 ## [8.41.2](https://github.com/jpe-nix/nix-ai/compare/v8.41.1...v8.41.2) (2026-11-22)
 
 
