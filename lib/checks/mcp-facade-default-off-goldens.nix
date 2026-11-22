@@ -10,7 +10,7 @@
 # projection; byte counts are unchanged.
 {
   baseCommit = "bd39621af5358bf01af73899f1761430ec6fae3d";
-  flakeLockSha256 = "ecd1baa52868dc5d316bb2f71b6c35ff87d095aabed81b6e5574f6a693abec06";
+  flakeLockSha256 = "ad4f52bcffde7d449639fb1b4666eff43390d483b1ad831085a4cb8cdf5f0580";
   projections = {
     aarch64-darwin = {
       bytes = 3357;
