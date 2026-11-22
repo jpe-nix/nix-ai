@@ -1,5 +1,19 @@
 # Changelog
 
+## [8.40.2](https://github.com/jpe-nix/nix-ai/compare/v8.40.1...v8.40.2) (2026-11-22)
+
+
+### Features
+
+* **ci:** re-pin the facade canary flake.lock digest on Renovate branches ([#3087](https://github.com/jpe-nix/nix-ai/issues/3087)) ([ad46d3f](https://github.com/jpe-nix/nix-ai/commit/ad46d3fefcbef3ead041a1b882ffaefbbee83548))
+
+
+### Bug Fixes
+
+* **claude:** turn off auto memory ([#3107](https://github.com/jpe-nix/nix-ai/issues/3107)) ([6d063e3](https://github.com/jpe-nix/nix-ai/commit/6d063e39655617b5e1429460e0b9eece7424b77f))
+* **release:** set the release manifest to 8.40.1 ([#3113](https://github.com/jpe-nix/nix-ai/issues/3113)) ([ffaabe5](https://github.com/jpe-nix/nix-ai/commit/ffaabe53577f070aaec0c30acc611b212c5ad89e))
+* **renovate:** release jacobpevans-cc-plugins input updates ([#3109](https://github.com/jpe-nix/nix-ai/issues/3109)) ([b765743](https://github.com/jpe-nix/nix-ai/commit/b765743b8726afabcaaeb05362669b898e8332ff))
+
 ## [8.19.0](https://github.com/jpe-nix/nix-ai/compare/v8.18.0...v8.19.0) (2026-11-22)
 
 
