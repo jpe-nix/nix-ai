@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.41.2](https://github.com/jpe-nix/nix-ai/compare/v8.41.1...v8.41.2) (2026-11-22)
+
+
+### Bug Fixes
+
+* **agent-hooks:** count a remote only when it has a URL ([#3139](https://github.com/jpe-nix/nix-ai/issues/3139)) ([8daf7bc](https://github.com/jpe-nix/nix-ai/commit/8daf7bc97802d2d4c37012058ea3ab8cfeac6f63))
+
 ## [8.41.1](https://github.com/jpe-nix/nix-ai/compare/v8.41.0...v8.41.1) (2026-11-22)
 
 
