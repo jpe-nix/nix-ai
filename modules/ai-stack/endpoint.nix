@@ -57,7 +57,7 @@ in
     agentQuotaQueryUrl = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
-      description = "Optional HTTPS metrics query URL for the delegation quota hook, supplied by the private host configuration.";
+      description = "Optional HTTPS metrics query URL for the delegation quota hook.";
     };
 
     localRouterUrl = lib.mkOption {
@@ -101,7 +101,7 @@ in
     agentQuotaTokenFile = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
-      description = "Optional absolute path to the delegation quota bearer-token file, supplied by the private host configuration.";
+      description = "Optional absolute path to the delegation quota bearer-token file.";
     };
 
     internalDomains = lib.mkOption {
