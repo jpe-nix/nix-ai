@@ -107,6 +107,7 @@ in
       package = uvLock.package "mlx-vlm";
     in
     "${package.name} @ ${package.source.url}";
+  mlxAudioInstallSpec = "mlx-audio==${uvLock.version "mlx-audio"}";
   mlx = uvLock.version "mlx";
   mlxLm = uvLock.version "mlx-lm";
   transformers = uvLock.version "transformers";
@@ -118,7 +119,7 @@ in
 
   # AI tools (pypi)
   # renovate: datasource=pypi depName=browser-use
-  browserUse = "0.13.14";
+  browserUse = "1.0.4";
   # The loopback proxy (modules/litellm-local). Runs from uvx rather than
   # nixpkgs so it tracks the upstream release train; nixpkgs lags by months
   # and builds it from source with a large test closure.
