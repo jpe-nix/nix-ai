@@ -28,6 +28,7 @@
         "mlx-lm"
         "mlx-vlm"
         "mlx-vlm-native"
+        "mlx-audio"
       ]
     );
     default = { };

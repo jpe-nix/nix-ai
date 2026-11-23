@@ -1,7 +1,7 @@
 # Local LiteLLM Proxy — Option Declarations
 #
-# All `options.programs.litellmLocal` declarations live here, mirroring the
-# per-module options.nix split used by fabric and the other agent modules.
+# `options.programs.litellmLocal` declarations; health checks are in
+# options-health.nix.
 {
   config,
   lib,

@@ -44,6 +44,7 @@
   cfg,
   mlxLmServer,
   mlxVlmServer,
+  mlxAudioServer,
 }:
 let
   patterns = {
@@ -51,6 +52,7 @@ let
     # The per-model VLM adapter runs as a script path in uvx argv.
     mlx-vlm = lib.escapeRegex mlxVlmServer.launchScriptBasename;
     mlx-vlm-native = lib.escapeRegex mlxVlmServer.nativeLaunchScriptBasename;
+    mlx-audio = lib.escapeRegex mlxAudioServer.launchScriptBasename;
   };
   backendsInUse = lib.unique ([ cfg.modelServerBackend ] ++ lib.attrValues cfg.modelBackends);
   selected = map (backend: patterns.${backend}) backendsInUse;

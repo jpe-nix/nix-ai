@@ -35,6 +35,7 @@ let
         maxNumSeqs = 1;
         tokenQueueTimeoutSeconds = 1800;
         draftBlockSize = 4;
+        draftKind = "mtp";
       };
     };
   };
@@ -47,6 +48,22 @@ let
     };
   };
   command = commandBuilder.mkModelCmd mtpTarget;
+  autoDraftCommand =
+    (import ../../modules/mlx/model-server-cmd.nix {
+      inherit (pkgs) lib;
+      cfg = mtpCfg // {
+        modelMtpProfiles = mtpCfg.modelMtpProfiles // {
+          ${mtpTarget} = mtpCfg.modelMtpProfiles.${mtpTarget} // {
+            draftKind = null;
+          };
+        };
+      };
+      mlxModelServerPkg = pkgs.writeShellScriptBin "mlx-model-server" "";
+      mlxModelServerPkgs = {
+        mlx-vlm-native = pkgs.writeShellScriptBin "stub-mlx-vlm-native-server" "";
+      };
+    }).mkModelCmd
+      mtpTarget;
   env =
     (import ../../modules/mlx/worker-env.nix {
       inherit (pkgs) lib;
@@ -93,4 +110,11 @@ in
       && env.MLX_VLM_TOKEN_QUEUE_TIMEOUT == "1800"
       || throw "catalog: enabled native MTP must emit its target, drafter, 128k window, batch width, and long-context queue timeout";
     pkgs.runCommand "check-mlx-mtp-native-contract" { } "touch $out";
+
+  mlx-mtp-auto-draft-kind =
+    assert
+      builtins.match ".*--draft-model ${mtpDrafter}.*" autoDraftCommand != null
+      && builtins.match ".*--draft-kind.*" autoDraftCommand == null
+      || throw "catalog: a null draftKind must keep --draft-model and omit --draft-kind so the server detects the family: ${autoDraftCommand}";
+    pkgs.runCommand "check-mlx-mtp-auto-draft-kind" { } "touch $out";
 }

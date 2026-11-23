@@ -69,7 +69,8 @@ let
       model_info = {
         max_input_tokens = contract.maxInputTokens;
         max_output_tokens = contract.maxOutputTokens;
-      };
+      }
+      // lib.optionalAttrs (contract.mode != null) { inherit (contract) mode; };
     }) (builtins.filter (role: !(localModelDefinesRole role)) (builtins.attrNames contract.roles))
   ) (builtins.attrNames staticResidentModels);
 in

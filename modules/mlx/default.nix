@@ -17,7 +17,7 @@ let
     model_revision = "";
   };
   parakeetMlxVersion = versions.parakeetMlx;
-  inherit (versions) mlxVlmInstallSpec;
+  inherit (versions) mlxVlmInstallSpec mlxAudioInstallSpec;
   uvPythonVersion = (import ../../lib/python.nix { inherit pkgs; }).pythonVersion;
 
   mlxLmServer = import ./mlx-lm-server.nix {
@@ -26,10 +26,14 @@ let
   mlxVlmServer = import ./mlx-vlm-server.nix {
     inherit pkgs mlxVlmInstallSpec uvPythonVersion;
   };
+  mlxAudioServer = import ./mlx-audio-server.nix {
+    inherit pkgs mlxAudioInstallSpec uvPythonVersion;
+  };
   mlxModelServerPkgs = {
     mlx-lm = mlxLmServer.pkg;
     mlx-vlm = mlxVlmServer.pkg;
     mlx-vlm-native = mlxVlmServer.nativePkg;
+    mlx-audio = mlxAudioServer.pkg;
   };
   mlxModelServerPkg = mlxModelServerPkgs.${cfg.modelServerBackend};
   apiUrl = "http://${cfg.host}:${toString cfg.port}/v1";
@@ -55,6 +59,7 @@ let
         cfg
         mlxLmServer
         mlxVlmServer
+        mlxAudioServer
         ;
     })
     modelServerProcessPattern
