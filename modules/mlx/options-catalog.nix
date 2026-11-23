@@ -20,7 +20,6 @@ let
   cfg = config.programs.mlx;
   catalogData = import ./catalog-data.nix;
   derivePinning = import ./derive-pinning.nix { inherit lib; };
-  derive = import ./derive.nix { inherit lib; };
 
   enabled = lib.filterAttrs (_: sel: sel.enable) cfg.catalog;
   contextCap = 200000;
@@ -114,49 +113,17 @@ let
   # wins over the catalog default, so the timeouts and the admission below
   # follow the worker's decode flags instead of a stale catalog number.
   servedConcurrency = entry: cfg.modelConcurrencyLimits.${entry.model} or entry.concurrency;
-  staticResidentContracts = lib.mapAttrs' (
-    name: _sel:
-    let
-      entry = entryFor name;
-      timeouts =
-        if entry ? fixedTimeoutSeconds then
-          {
-            requestTimeoutSeconds = entry.fixedTimeoutSeconds;
-            pipeTimeoutSeconds = 2 * entry.fixedTimeoutSeconds;
-          }
-        else
-          derive.requestTimeouts {
-            contextWindowTokens = capContext entry.contextWindowTokens;
-            inherit (entry)
-              maxOutputTokens
-              queueSize
-              prefillTokensPerSecond
-              decodeTokensPerSecond
-              ;
-            concurrency = servedConcurrency entry;
-          };
-      roles = lib.filterAttrs (_: model: model == entry.model) config.services.aiStack.models;
-    in
-    lib.nameValuePair entry.model {
-      inherit (entry)
-        model
-        servicePort
-        maxOutputTokens
-        queueSize
-        weightGb
-        ;
-      contextWindowTokens = capContext entry.contextWindowTokens;
-      concurrency = servedConcurrency entry;
-      catalogKey = name;
-      launchdLabel = if roles ? default then "dev.mlx-model-server" else "dev.mlx-model-server.${name}";
-      backend = cfg.modelBackends.${entry.model} or cfg.modelServerBackend;
-      maxInputTokens = capContext entry.contextWindowTokens - entry.maxOutputTokens;
-      timeoutSeconds = timeouts.requestTimeoutSeconds;
-      inherit (timeouts) pipeTimeoutSeconds;
-      inherit roles;
-      mode = entry.mode or null;
-    }
-  ) (lib.filterAttrs (name: sel: sel.class == "resident" && (entryFor name) ? servicePort) enabled);
+  staticResidentContracts = import ./static-resident-contracts.nix {
+    inherit
+      lib
+      config
+      cfg
+      enabled
+      entryFor
+      capContext
+      servedConcurrency
+      ;
+  };
 in
 {
   options.programs.mlx = {
