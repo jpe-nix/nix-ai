@@ -72,4 +72,5 @@ jobs:
       dry_run: ${{ vars.AI_AGENT_CI_FIX_DRY_RUN != 'false' }}
     secrets:
       LLM_ROUTER_BASE_URL: ${{ secrets.LLM_ROUTER_BASE_URL }}
+      LLM_ROUTER_API_KEY: ${{ secrets.LLM_ROUTER_API_KEY }}
       OPENBAO_ADDR: ${{ secrets.OPENBAO_ADDR }}
