@@ -107,7 +107,8 @@ in
       package = uvLock.package "mlx-vlm";
     in
     "${package.name} @ ${package.source.url}";
-  mlxAudioInstallSpec = "mlx-audio==${uvLock.version "mlx-audio"}";
+  # The server extra carries uvicorn and fastapi; stt and tts carry the model loaders.
+  mlxAudioInstallSpec = "mlx-audio[server,stt,tts]==${uvLock.version "mlx-audio"}";
   mlx = uvLock.version "mlx";
   mlxLm = uvLock.version "mlx-lm";
   transformers = uvLock.version "transformers";
