@@ -25,6 +25,17 @@
             default = 1800;
             description = "Native mlx-vlm token-queue timeout for long-context MTP requests.";
           };
+          draftKind = lib.mkOption {
+            type = lib.types.nullOr (
+              lib.types.enum [
+                "dflash"
+                "eagle3"
+                "mtp"
+              ]
+            );
+            default = "mtp";
+            description = "Native mlx-vlm drafter family passed as --draft-kind. Null omits the flag, so the server detects the family from the drafter's model_type (bundled DSpark heads detect as dflash).";
+          };
           draftBlockSize = lib.mkOption {
             type = lib.types.nullOr (lib.types.ints.between 2 8);
             default = null;

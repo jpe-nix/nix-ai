@@ -10,15 +10,15 @@
 # projection; byte counts are unchanged.
 {
   baseCommit = "bd39621af5358bf01af73899f1761430ec6fae3d";
-  flakeLockSha256 = "46e6427d5deae1693f632f0934b18e76728cf9c71a8c6f22d44af138c90d2613";
+  flakeLockSha256 = "1bc946dbc3a14583be35cdb03228773f94063ec97f1fdc300ab7a8dd9428f288";
   projections = {
     aarch64-darwin = {
       bytes = 3357;
-      sha256 = "de5ca3d56fd484c910b6f9348625c887f29cf98487280f95af4afd9ce7317352";
+      sha256 = "bf2271b285799eb45cadf09294d95c3426c2bc928ab9f7c0330e68bcba725ae8";
     };
     x86_64-linux = {
       bytes = 3175;
-      sha256 = "cd493162676eae7b9017a71136e811230ba1ec84d0738aab0fae074c80dde0de";
+      sha256 = "cb647d9304c2f3f985e2d0e49878e86c6dcd2c82f83086494a73952c5187718f";
     };
   };
 }

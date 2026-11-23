@@ -212,6 +212,13 @@
       flake = false;
     };
 
+    # Cloud-agnostic SRE and observability skills (non-GCP subset selected in
+    # modules/agent-skills/sources.nix).
+    sre-skills = {
+      url = "github:gemini-cli-extensions/sre";
+      flake = false;
+    };
+
     # Slack channel plugin for Claude Code (Socket Mode bridge, sender
     # allowlist, permission relay). Pinned by full commit SHA, never a branch:
     # third-party source. Wired only when programs.claude.slackChannel.enable
@@ -268,13 +275,6 @@
     };
     gh-stack = {
       url = "github:github/gh-stack";
-      flake = false;
-    };
-
-    # Cloud-agnostic SRE and observability skills (non-GCP subset selected in
-    # modules/agent-skills/sources.nix).
-    sre-skills = {
-      url = "github:gemini-cli-extensions/sre";
       flake = false;
     };
 

@@ -36,7 +36,11 @@ in
     # filter on `list` (the raw project list was reported as huge). Also
     # search-before-create: `create`/`bulk-create` comment on an open task
     # with the same normalized title in the same project instead of
-    # duplicating it.
+    # duplicating it. And labels are additive everywhere: `update`,
+    # `bulk-update` and both create paths applied labels through the bulk
+    # endpoint, whose `{label_ids}` payload Vikunja discards -- it cleared
+    # every label and still reported success (ported from upstream
+    # democratize-technology/vikunja-mcp PRs #49 and #92).
     patches = [ ../../patches/vikunja-mcp-0.2.0-defects.patch ];
 
     postPatch = ''
@@ -60,7 +64,8 @@ in
         ${../../patches/test-bulk-update-no-clobber.mjs} \
         ${../../patches/test-update-done.mjs} \
         ${../../patches/test-update-field-value-rejected.mjs} \
-        ${../../patches/test-create-dedupe.mjs}
+        ${../../patches/test-create-dedupe.mjs} \
+        ${../../patches/test-labels-preserved.mjs}
       runHook postCheck
     '';
 

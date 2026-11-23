@@ -8,6 +8,10 @@ set -euo pipefail
 out="${out:?out not set (expected from the Nix build environment)}"
 script="${SRC}/modules/agent-hooks/worktree-add-guard.sh"
 
+# Keep fixture remotes independent of operator-global Git configuration.
+export GIT_CONFIG_GLOBAL=/dev/null
+export GIT_CONFIG_NOSYSTEM=1
+
 fail=0
 
 expect_allow() {
@@ -47,8 +51,84 @@ expect_deny_reason() {
   fi
 }
 
-raw_branch_reason="Start branches with \`git town hack <name>\` (or the harness worktree); never from a local base."
+expect_deny_contains() {
+  local label="$1" input="$2" expected="$3"
+  local result
+  result=$(printf '%s' "$input" | bash "$script")
+  if ! printf '%s' "$result" | jq -e --arg expected "$expected" \
+    '.hookSpecificOutput.permissionDecision == "deny" and (.hookSpecificOutput.permissionDecisionReason | contains($expected))' >/dev/null; then
+    echo "FAIL ($label): expected deny reason to contain '$expected', got: $result" >&2
+    fail=1
+  else
+    echo "PASS ($label): denied with expected reason text"
+  fi
+}
+
+hook_input() {
+  local command="$1" cwd="$2"
+  jq -cn --arg command "$command" --arg cwd "$cwd" \
+    '{tool_name:"Bash",tool_input:{command:$command},cwd:$cwd}'
+}
+
+setup_test_repo() {
+  local repo_dir="$1" template_dir="$2"
+  git -C "$repo_dir" init -q --initial-branch=main --template="$template_dir"
+}
+
+fixture_root="$(mktemp -d)"
+trap 'rm -rf "$fixture_root"' EXIT
+no_remote_repo="$fixture_root/no-remote"
+origin_repo="$fixture_root/with-origin"
+empty_template="$fixture_root/empty-template"
+mkdir -p "$no_remote_repo" "$origin_repo" "$empty_template"
+setup_test_repo "$no_remote_repo" "$empty_template"
+setup_test_repo "$origin_repo" "$empty_template"
+git -C "$origin_repo" remote add origin https://example.invalid/repo.git
+
+raw_branch_reason="Start branches with \`git town hack <name>\`, or \`git worktree add <repo>/.worktrees/<name> -b <branch> origin/<default-branch>\`; never from a local base."
 base_merge_reason="Sync with \`git town sync\` (rebase); never merge the base into a PR branch."
+
+expect_allow "switch -c in repository without remotes" \
+  "$(hook_input 'git switch -c x' "$no_remote_repo")"
+
+expect_allow "checkout -b in repository without remotes" \
+  "$(hook_input 'git checkout -b x' "$no_remote_repo")"
+
+expect_allow "branch creation in repository without remotes" \
+  "$(hook_input 'git branch x' "$no_remote_repo")"
+
+expect_allow "worktree local start in repository without remotes" \
+  "$(hook_input 'git worktree add .worktrees/x -b x main' "$no_remote_repo")"
+
+expect_allow "git -C switch -c in repository without remotes" \
+  "$(hook_input "git -C $no_remote_repo switch -c y" "$fixture_root")"
+
+# A global remote setting without a URL does not make a repository remote-backed.
+global_remote_config="$fixture_root/global-remote-config"
+git config --file "$global_remote_config" remote.origin.followRemoteHEAD always
+GIT_CONFIG_GLOBAL="$global_remote_config" expect_allow \
+  "switch -c without remotes, global remote.origin setting" \
+  "$(hook_input 'git switch -c x' "$no_remote_repo")"
+GIT_CONFIG_GLOBAL="$global_remote_config" expect_deny_contains \
+  "switch -c with origin remote, global remote.origin setting" \
+  "$(hook_input "git -C $origin_repo switch -c x" "$fixture_root")" \
+  'origin/<default-branch>'
+
+expect_deny_contains "switch -c after cd, from a repository without remotes" \
+  "$(hook_input "cd $origin_repo && git switch -c x" "$no_remote_repo")" \
+  'origin/<default-branch>'
+
+expect_deny_contains "switch -c in repository with origin remote" \
+  "$(hook_input "git -C $origin_repo switch -c x" "$fixture_root")" \
+  'origin/<default-branch>'
+
+expect_deny_contains "worktree local start in repository with origin remote" \
+  "$(hook_input "git -C $origin_repo worktree add .worktrees/x -b x main" "$fixture_root")" \
+  'origin/<default-branch>'
+
+expect_deny_reason "worktree local start in non-repository" \
+  '{"tool_name":"Bash","tool_input":{"command":"git worktree add .worktrees/x -b x main"},"cwd":"/repo"}' \
+  "$raw_branch_reason"
 
 expect_allow "relative under .worktrees" \
   '{"tool_name":"Bash","tool_input":{"command":"git worktree add .worktrees/x origin/develop"},"cwd":"/repo"}'
