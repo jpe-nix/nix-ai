@@ -162,7 +162,6 @@ and adding any required runtime secret injection.
 | Port | Service | Protocol | Module |
 |------|---------|----------|--------|
 | 4100 | Local LiteLLM proxy (loopback only) | HTTP (Anthropic + OpenAI-compatible) | `modules/litellm-local/` |
-| 11428–11431 | Shared MLX residents, see [mlx-stack](mlx-stack.md) (opt-in) | HTTP (OpenAI-compatible) | `modules/mlx/` |
 | 11434 | llama-swap proxy | HTTP (OpenAI-compatible) | `modules/mlx/` |
 | 11436+ | MLX model-server workers (mlx-lm) | HTTP (managed by llama-swap) | `modules/mlx/` |
 | 8180 | Fabric REST API (opt-in) | HTTP + Swagger UI | `modules/fabric/` |
@@ -171,8 +170,10 @@ and adding any required runtime secret injection.
 
 OTLP collector endpoints are **not** listed here. They are site-specific and
 carry no default: set `userConfig.telemetry.otlpEndpoint` (Claude Code) and
-`programs.mlx.telemetry.otlpEndpoint` in your own configuration. A row here is
-a claim that something listens; do not add one for a planned service.
+`programs.mlx.telemetry.otlpEndpoint` in your own configuration. This table
+previously listed a loopback OTEL port that nothing served, and both modules
+defaulted to it — the export silently went nowhere. A row here is a claim that
+something listens; do not add one for a planned service.
 
 Reserved but avoid: **11435** (macOS app conflict, see PR #230).
 

@@ -127,9 +127,8 @@ model's chat template. No tool-call parser flag is passed.
 (`modules/mlx/static-residents.nix`). A resident restart pays a full reload — seconds
 for a small MoE, ~60-120s for a 120B model.
 
-**Shared residents**: up to four static resident servers run at once. Their
-ports are Inkling 2 Mini 11428, Gemma 4 12B 11429, Qwen3-ASR-1.7B 11430 and
-Ming-3.0-tts 11431. Each one's limits come from its catalog entry
+**Shared residents**: up to four static resident servers run at once. Each
+one's limits come from its catalog entry
 (`modules/mlx/catalog-data-residents.nix`):
 
 - A native mlx-vlm server caps each stream's KV window with `--max-kv-size`.
