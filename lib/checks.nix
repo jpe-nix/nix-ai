@@ -290,6 +290,8 @@ in
 // (import ./checks/mlx-static-fallback.nix { inherit pkgs hmConfigStaticServing; })
 // (import ./checks/mlx-catalog-vlm.nix { inherit pkgs src hmConfigCatalog; })
 // (import ./checks/mlx-mtp-reachable.nix { inherit pkgs mkHmConfig; })
+// (import ./checks/mlx-audio-command.nix { inherit pkgs hmConfigCatalog; })
+// (import ./checks/mlx-shared-residents.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/mlx-model-extra-args.nix { inherit pkgs; })
 // (import ./checks/mlx-catalog.nix { inherit pkgs hmConfigCatalog; })
 // (import ./checks/local-context-cap.nix { inherit pkgs hmConfigCatalog; })
@@ -342,6 +344,7 @@ in
 // (import ./checks/litellm-local-negative.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/litellm-local-isolated-chains.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/litellm-local-launch-prefix.nix { inherit pkgs mkHmConfig; })
+// (import ./checks/litellm-local-background-health-checks.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/litellm-local-scripts.nix { inherit pkgs src; })
 // (import ./checks/litellm-local-aliases.nix { inherit pkgs hmConfig homelab-contracts; })
 // (import ./checks/fabric.nix {

@@ -167,6 +167,11 @@ in
   general_settings = {
     dangerously_permit_weak_or_unset_master_key = true;
   }
+  # Probes every route on an interval; audio routes send a real request each time.
+  // lib.optionalAttrs cfg.backgroundHealthChecks {
+    background_health_checks = true;
+    health_check_interval = 300;
+  }
   //
     lib.optionalAttrs
       (

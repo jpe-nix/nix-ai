@@ -107,6 +107,7 @@ in
       package = uvLock.package "mlx-vlm";
     in
     "${package.name} @ ${package.source.url}";
+  mlxAudioInstallSpec = "mlx-audio==${uvLock.version "mlx-audio"}";
   mlx = uvLock.version "mlx";
   mlxLm = uvLock.version "mlx-lm";
   transformers = uvLock.version "transformers";
