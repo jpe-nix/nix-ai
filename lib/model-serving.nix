@@ -20,6 +20,7 @@ let
     backend != null
     && builtins.elem backend [
       "mlx-lm"
+      "mlx-lm-pr"
       "mlx-vlm"
       "mlx-vlm-native"
     ]

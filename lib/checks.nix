@@ -290,7 +290,7 @@ in
 // (import ./checks/mlx-static-fallback.nix { inherit pkgs hmConfigStaticServing; })
 // (import ./checks/mlx-catalog-vlm.nix { inherit pkgs src hmConfigCatalog; })
 // (import ./checks/mlx-mtp-reachable.nix { inherit pkgs mkHmConfig; })
-// (import ./checks/mlx-audio-command.nix { inherit pkgs hmConfigCatalog; })
+// (import ./checks/mlx-audio-command.nix { inherit pkgs hmConfigCatalog mkHmConfig; })
 // (import ./checks/mlx-shared-residents.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/mlx-model-extra-args.nix { inherit pkgs; })
 // (import ./checks/mlx-catalog.nix { inherit pkgs hmConfigCatalog; })

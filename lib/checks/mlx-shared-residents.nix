@@ -45,6 +45,7 @@ let
     mlxModelServerPkg = pkgs.writeShellScriptBin "mlx-model-server" "";
     mlxModelServerPkgs = {
       mlx-audio = pkgs.writeShellScriptBin "stub-mlx-audio-server" "";
+      mlx-lm-pr = pkgs.writeShellScriptBin "stub-mlx-lm-pr-server" "";
     };
   };
   inkling = "mlx-community/Inkling-2-Mini-4bit";
@@ -73,8 +74,8 @@ in
       lib.all (m: contracts ? ${m}) models
       || throw "mlx shared residents: a shared resident has no static contract";
     assert
-      builtins.match ".*--max-kv-size 65536.*" (commands.mkModelCmd inkling) != null
-      || throw "mlx shared residents: Inkling must cap its KV window at 65536 tokens";
+      builtins.match ".*stub-mlx-lm-pr-server --model .*" (commands.mkModelCmd inkling) != null
+      || throw "mlx shared residents: Inkling must use the mlx-lm PR backend with its pinned model path";
     assert
       builtins.match ".*--prompt-cache-bytes 2684354560.*" (commands.mkModelCmd gemma) != null
       || throw "mlx shared residents: Gemma must pin its prompt cache at 2560 MB";
