@@ -1,5 +1,17 @@
 # Changelog
 
+## [8.48.0](https://github.com/jpe-nix/nix-ai/compare/v8.47.0...v8.48.0) (2026-11-23)
+
+
+### Features
+
+* **agent-skills:** add sre-skills observability and review skills ([#3059](https://github.com/jpe-nix/nix-ai/issues/3059)) ([f70569d](https://github.com/jpe-nix/nix-ai/commit/f70569d05e9186a1f996c8e7b2c4616b556cfce6))
+
+
+### Bug Fixes
+
+* **ci-fix:** pass the router key to the conflict fix ([#3170](https://github.com/jpe-nix/nix-ai/issues/3170)) ([914dc4a](https://github.com/jpe-nix/nix-ai/commit/914dc4a54cc6edec3af333b86675936cbb2849ca))
+
 ## [8.47.0](https://github.com/jpe-nix/nix-ai/compare/v8.46.0...v8.47.0) (2026-11-23)
 
 
