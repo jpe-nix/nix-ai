@@ -62,14 +62,18 @@
     keyEnv = "ZAI_SUBSCRIPTION_KEY";
     claude = {
       baseUrl = "https://api.z.ai/api/anthropic";
-      primaryModel = "glm-5.3[1m]";
+      # Claude Code strips the [1m] suffix client-side.
+      primaryModel = "glm-5.4[1m]";
+      # No GLM-5.4 flash exists, so the fast slot keeps the previous model.
       fastModel = "glm-5.3-flash[1m]";
       autoCompactWindow = "500000";
     };
-    zcode.model = "GLM-5.3-Flash";
+    # ZCode's bundled catalog has no GLM-5.4 entry; modules/zcode/configure-key.mjs
+    # registers the id as a personal model on the coding plan provider.
+    zcode.model = "glm-5.4";
     codex = {
       baseUrl = "https://api.z.ai/api/v1";
-      model = "glm-5.3";
+      model = "glm-5.4";
       effectiveContextWindowPercent = 50;
     };
   };
