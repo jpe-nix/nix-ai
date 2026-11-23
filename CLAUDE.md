@@ -125,7 +125,7 @@ instead. Design decisions in [`docs/adr/`](docs/adr/README.md).
 ## MLX Ecosystem
 
 Three tools — `parakeet-mlx` (audio), `mlx-vlm` (vision), `mlx-lm` (LLM). The first two are
-`uvx` wrappers; `mlx_lm.server` runs as up to three always-loaded LaunchAgents
+`uvx` wrappers; `mlx_lm.server` runs as up to four always-loaded LaunchAgents
 (`modules/mlx/static-residents.nix`). Full dependency
 graph, version management, and operational notes (tool-call parser, idle eviction, MoE
 throughput) in [`docs/architecture/mlx-stack.md`](docs/architecture/mlx-stack.md).

@@ -68,6 +68,14 @@ let
     catalogEntry = { };
     mlxCatalogEntry.backend = "mlx-vlm";
   };
+  mlxNativeVisionModel = import ../../lib/model-serving.nix {
+    catalogEntry = { };
+    mlxCatalogEntry.backend = "mlx-vlm-native";
+  };
+  mlxAudioModel = import ../../lib/model-serving.nix {
+    catalogEntry = { };
+    mlxCatalogEntry.backend = "mlx-audio";
+  };
   embeddingOnChatBackend = import ../../lib/model-serving.nix {
     catalogEntry = {
       stage0.serving = {
@@ -126,6 +134,11 @@ let
     };
 
   realErrors = errorsFor roleMap;
+  audioResidentRoleMap = roleMap // {
+    models = roleMap.models // {
+      qwen3-asr-1-7b.id = catalog.qwen3-asr-1-7b.model;
+    };
+  };
   callerRoleMapWithoutMlxChat = roleMap // {
     models = roleMap.models // {
       mimo-9b = builtins.removeAttrs roleMap.models.mimo-9b [ "mlxChat" ];
@@ -201,6 +214,9 @@ in
       && mlxLanguageModel.mlxChat
       && mlxVisionLanguageModel.serving.backend == "mlx-vlm"
       && mlxVisionLanguageModel.mlxChat
+      && mlxNativeVisionModel.mlxChat
+      && mlxAudioModel.mlxAudio
+      && !mlxAudioModel.mlxChat
       && !embeddingOnChatBackend.mlxChat
       || throw "role map: runtime and endpoint metadata must separate chat models from embedding and system-one models";
     assert
@@ -208,6 +224,9 @@ in
       && stage0RoleMap.models.stage0_embedding.serving.runtime == "mlx-vlm"
       && stage0RoleMap.models.stage0_systemone_opendecider.serving.endpoint == "/v1/systemone"
       || throw "role map: non-MLX runtime records must remain available to their consumers";
+    assert
+      errorsFor audioResidentRoleMap == realErrors
+      || throw "role map: an mlx-audio catalog entry is a served model, not a missing chat backend";
     assert
       errorsFor callerRoleMapWithoutMlxChat == [ ]
       && reports callerRoleMapWithExplicitFalse ".*model `mimo-9b` has an MLX catalog entry without a chat-completion backend.*"

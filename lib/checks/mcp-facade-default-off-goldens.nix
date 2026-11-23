@@ -14,11 +14,11 @@
   projections = {
     aarch64-darwin = {
       bytes = 3357;
-      sha256 = "de5ca3d56fd484c910b6f9348625c887f29cf98487280f95af4afd9ce7317352";
+      sha256 = "bf2271b285799eb45cadf09294d95c3426c2bc928ab9f7c0330e68bcba725ae8";
     };
     x86_64-linux = {
       bytes = 3175;
-      sha256 = "cd493162676eae7b9017a71136e811230ba1ec84d0738aab0fae074c80dde0de";
+      sha256 = "cb647d9304c2f3f985e2d0e49878e86c6dcd2c82f83086494a73952c5187718f";
     };
   };
 }

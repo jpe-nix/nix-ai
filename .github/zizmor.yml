@@ -7,6 +7,11 @@
 # To run a full audit: zizmor --persona=auditor .github/workflows/
 
 rules:
+  # Same scope as the org policy: the caller's job runs only for this repository's own pull request runs.
+  dangerous-triggers:
+    ignore:
+      - openhands-ci-fix.yml
+
   # Trusted first-party and central reusable workflows follow their owners'
   # reviewed release tags. Other unpinned action references remain findings.
   unpinned-uses:
