@@ -1,5 +1,17 @@
 # Changelog
 
+## [8.44.0](https://github.com/jpe-nix/nix-ai/compare/v8.43.0...v8.44.0) (2026-11-23)
+
+
+### Features
+
+* **claude:** add claude-local and claude-homelab launchers with model discovery ([#3083](https://github.com/jpe-nix/nix-ai/issues/3083)) ([2b09a36](https://github.com/jpe-nix/nix-ai/commit/2b09a365fc72de51272edb5a140f3e8a58e54c14))
+
+
+### Bug Fixes
+
+* **mlx:** install the mlx-audio server, stt and tts extras ([#3155](https://github.com/jpe-nix/nix-ai/issues/3155)) ([fb21127](https://github.com/jpe-nix/nix-ai/commit/fb21127755ffb73e4ce52128742d4a4c889f5b5c))
+
 ## [8.43.0](https://github.com/jpe-nix/nix-ai/compare/v8.42.0...v8.43.0) (2026-11-23)
 
 
