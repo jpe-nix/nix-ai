@@ -1,5 +1,17 @@
 # Changelog
 
+## [8.46.0](https://github.com/jpe-nix/nix-ai/compare/v8.45.0...v8.46.0) (2026-11-23)
+
+
+### Features
+
+* **zcode:** default to GLM-5.4 through a personal model rule ([#3163](https://github.com/jpe-nix/nix-ai/issues/3163)) ([ee1886a](https://github.com/jpe-nix/nix-ai/commit/ee1886abcd12056c8f0f8a02b095d5b0c002b246))
+
+
+### Bug Fixes
+
+* **mcp:** keep task labels on vikunja-mcp update ([#3159](https://github.com/jpe-nix/nix-ai/issues/3159)) ([20cd74d](https://github.com/jpe-nix/nix-ai/commit/20cd74dfbba05c983389749c3feadfaf024f19b6))
+
 ## [8.45.0](https://github.com/jpe-nix/nix-ai/compare/v8.44.0...v8.45.0) (2026-11-23)
 
 
