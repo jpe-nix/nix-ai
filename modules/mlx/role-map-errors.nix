@@ -26,10 +26,11 @@ let
         else
           { mlxChat = false; };
       mlxChat = model.mlxChat or inferredServing.mlxChat;
+      served = mlxChat || inferredServing.mlxAudio or false;
     in
-    if hasCatalogEntry && !mlxChat then
+    if hasCatalogEntry && !served then
       [ "model `${key}` has an MLX catalog entry without a chat-completion backend" ]
-    else if !mlxChat then
+    else if !served then
       [ ]
     else if !hasCatalogEntry then
       [ "model `${key}` is not a catalog entry" ]
