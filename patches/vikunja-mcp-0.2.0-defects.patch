@@ -33,8 +33,8 @@ diff --color -ruN a/dist/tools/projects.js b/dist/tools/projects.js
                              content: [
 diff --color -ruN a/dist/tools/tasks/bulk-operations.js b/dist/tools/tasks/bulk-operations.js
 --- a/dist/tools/tasks/bulk-operations.js	1985-10-26 03:15:00.000000000 -0500
-+++ b/dist/tools/tasks/bulk-operations.js	2026-10-08 22:33:35.203854257 -0400
-@@ -13,6 +13,7 @@
++++ b/dist/tools/tasks/bulk-operations.js	2026-11-23 12:00:00.000000000 -0400
+@@ -13,6 +13,7 @@ const auth_error_handler_1 = require("../../utils/auth-error-handler");
  const retry_1 = require("../../utils/retry");
  const constants_1 = require("./constants");
  const validation_1 = require("./validation");
@@ -42,7 +42,7 @@ diff --color -ruN a/dist/tools/tasks/bulk-operations.js b/dist/tools/tasks/bulk-
  /**
   * Process an array in batches
   */
-@@ -137,124 +138,14 @@
+@@ -137,124 +138,14 @@ async function bulkUpdateTasks(args) {
          const client = await (0, client_1.getVikunjaClient)();
          // Use the proper bulk update API endpoint
          try {
@@ -175,7 +175,25 @@ diff --color -ruN a/dist/tools/tasks/bulk-operations.js b/dist/tools/tasks/bulk-
          }
          catch (bulkError) {
              // If bulk update fails, fall back to individual updates
-@@ -563,7 +454,18 @@
+@@ -346,12 +237,11 @@ async function bulkUpdateTasks(args) {
+                         }
+                     }
+                     if (args.field === 'labels' && Array.isArray(args.value)) {
+-                        await (0, retry_1.withRetry)(() => client.tasks.updateTaskLabels(taskId, {
+-                            label_ids: args.value,
+-                        }), {
+-                            ...retry_1.RETRY_CONFIG.AUTH_ERRORS,
+-                            shouldRetry: (error) => (0, auth_error_handler_1.isAuthenticationError)(error)
+-                        });
++                        // Same defect as the single-task update, multiplied by N tasks:
++                        // the bulk endpoint's `{label_ids}` payload is discarded, so
++                        // every task in the batch lost its labels and gained none.
++                        // Add only what is missing, per task, on the individual endpoint.
++                        await (0, crud_1.addLabelsToTaskAdditive)(client, taskId, args.value);
+                     }
+                     return updatedTask;
+                 }));
+@@ -563,7 +453,18 @@ async function bulkCreateTasks(args) {
          // Create tasks in batches
          const projectId = args.projectId; // TypeScript knows this is defined due to earlier check
          const creationResults = await processBatches(args.tasks, constants_1.BULK_OPERATION_BATCH_SIZE, async (batch) => {
@@ -195,7 +213,25 @@ diff --color -ruN a/dist/tools/tasks/bulk-operations.js b/dist/tools/tasks/bulk-
                  // Create the base task
                  const newTask = {
                      title: taskData.title,
-@@ -636,7 +538,13 @@
+@@ -593,12 +494,11 @@ async function bulkCreateTasks(args) {
+                         if (taskData.labels && taskData.labels.length > 0) {
+                             const taskId = createdTask.id;
+                             const labelIds = taskData.labels;
+-                            await (0, retry_1.withRetry)(() => client.tasks.updateTaskLabels(taskId, {
+-                                label_ids: labelIds,
+-                            }), {
+-                                ...retry_1.RETRY_CONFIG.AUTH_ERRORS,
+-                                shouldRetry: (error) => (0, auth_error_handler_1.isAuthenticationError)(error)
+-                            });
++                            // Same defect as create/update: the bulk endpoint's
++                            // `{label_ids}` payload is discarded, so labels silently
++                            // never applied. The task was just created, so there is
++                            // nothing to preserve.
++                            await (0, crud_1.addLabelsToTaskAdditive)(client, taskId, labelIds, { currentLabelIds: [] });
+                         }
+                         if (taskData.assignees && taskData.assignees.length > 0) {
+                             const taskId = createdTask.id;
+@@ -636,7 +536,13 @@ async function bulkCreateTasks(args) {
                      }
                  }
                  return createdTask;
@@ -212,21 +248,23 @@ diff --color -ruN a/dist/tools/tasks/bulk-operations.js b/dist/tools/tasks/bulk-
          // Process results
 diff --color -ruN a/dist/tools/tasks/crud.js b/dist/tools/tasks/crud.js
 --- a/dist/tools/tasks/crud.js	1985-10-26 03:15:00.000000000 -0500
-+++ b/dist/tools/tasks/crud.js	2026-10-08 22:34:14.986130647 -0400
-@@ -7,6 +7,9 @@
++++ b/dist/tools/tasks/crud.js	2026-11-23 12:00:00.000000000 -0400
+@@ -7,6 +7,10 @@ exports.createTask = createTask;
  exports.getTask = getTask;
  exports.updateTask = updateTask;
  exports.deleteTask = deleteTask;
 +exports.normalizeTitle = normalizeTitle;
 +exports.findOpenDuplicate = findOpenDuplicate;
 +exports.recordDuplicate = recordDuplicate;
++exports.addLabelsToTaskAdditive = addLabelsToTaskAdditive;
  const index_1 = require("../../types/index");
  const client_1 = require("../../client");
  const logger_1 = require("../../utils/logger");
-@@ -15,6 +18,30 @@
+@@ -14,6 +18,88 @@ const auth_error_handler_1 = require("../../utils/auth-error-handler");
+ const retry_1 = require("../../utils/retry");
  const constants_1 = require("./constants");
  const validation_1 = require("./validation");
- /**
++/**
 + * Search-before-create: the fingerprint is the project plus the title,
 + * lowercased with punctuation and whitespace collapsed.
 + */
@@ -251,10 +289,67 @@ diff --color -ruN a/dist/tools/tasks/crud.js b/dist/tools/tasks/crud.js
 +    return client.tasks.getTask(existing.id);
 +}
 +/**
++ * Applies labels to a task WITHOUT destroying the ones it already has.
++ *
++ * `updateTaskLabels` posts `{label_ids: [...]}` to /tasks/{id}/labels/bulk,
++ * but Vikunja models that endpoint as `{labels: [...]}`: the unknown field is
++ * discarded, the server reads an EMPTY label list and applies it -- removing
++ * every label, adding none, and answering 201. A task carrying labels 2 and 4
++ * that received `update labels: [3]` ended up with none (upstream
++ * democratize-technology/vikunja-mcp#92; payload analysis in #49).
++ *
++ * The fix reads the current set and requests only the missing ones on the
++ * individual PUT /tasks/{id}/labels endpoint -- the same non-destructive
++ * per-item shape `update`'s own assignee handling already uses, and the
++ * endpoint the `apply-label` subcommand always used. Current labels come from
++ * GET /tasks/{id}/labels because the array embedded in a getTask response is
++ * not reliably populated (#49); it is only a fallback. Re-adding a label the
++ * task already has is tolerated as a no-op instead of aborting the rest.
++ *
++ * @param currentLabelIds labels the task already carries; passing [] (task
++ *        was just created) skips the read.
++ * @returns what was added and what was kept, so callers can report it.
++ */
++async function addLabelsToTaskAdditive(client, taskId, labelIds, options) {
++    let kept = options === null || options === void 0 ? void 0 : options.currentLabelIds;
++    if (kept === undefined) {
++        let currentLabels;
++        try {
++            currentLabels = await client.tasks.getTaskLabels(taskId);
++        }
++        catch {
++            currentLabels = (await client.tasks.getTask(taskId)).labels;
++        }
++        kept = (Array.isArray(currentLabels) ? currentLabels : [])
++            .map((label) => label.id)
++            .filter((id) => typeof id === 'number');
++    }
++    const requested = [...new Set(labelIds)];
++    const toAdd = requested.filter((id) => !kept.includes(id));
++    const added = [];
++    for (const labelId of toAdd) {
++        try {
++            await (0, retry_1.withRetry)(() => client.tasks.addLabelToTask(taskId, {
++                task_id: taskId,
++                label_id: labelId,
++            }), {
++                ...retry_1.RETRY_CONFIG.AUTH_ERRORS,
++                shouldRetry: (error) => (0, auth_error_handler_1.isAuthenticationError)(error)
++            });
++            added.push(labelId);
++        }
++        catch (labelError) {
++            if (labelError instanceof Error && labelError.message.toLowerCase().includes('already exists'))
++                continue;
++            throw labelError;
++        }
++    }
++    return { added, kept };
++}
+ /**
   * Create a new task
   */
- async function createTask(args) {
-@@ -35,6 +62,25 @@
+@@ -35,6 +121,25 @@ async function createTask(args) {
              args.assignees.forEach((id) => (0, validation_1.validateId)(id, 'assignee ID'));
          }
          const client = await (0, client_1.getVikunjaClient)();
@@ -280,7 +375,24 @@ diff --color -ruN a/dist/tools/tasks/crud.js b/dist/tools/tasks/crud.js
          const newTask = {
              title: args.title,
              project_id: args.projectId,
-@@ -200,6 +246,13 @@
+@@ -64,12 +169,10 @@ async function createTask(args) {
+                 const taskId = createdTask.id;
+                 const labelIds = args.labels;
+                 try {
+-                    await (0, retry_1.withRetry)(() => client.tasks.updateTaskLabels(taskId, {
+-                        label_ids: labelIds,
+-                    }), {
+-                        ...retry_1.RETRY_CONFIG.AUTH_ERRORS,
+-                        shouldRetry: (error) => (0, auth_error_handler_1.isAuthenticationError)(error)
+-                    });
++                    // The bulk label endpoint discards `{label_ids: [...]}` and applies
++                    // nothing. The task was just created, so there is nothing to
++                    // preserve: `currentLabelIds: []` skips the read.
++                    await addLabelsToTaskAdditive(client, taskId, labelIds, { currentLabelIds: [] });
+                     labelsAdded = true;
+                 }
+                 catch (labelError) {
+@@ -200,6 +303,13 @@ async function updateTask(args) {
          if (!args.id) {
              throw new index_1.MCPError(index_1.ErrorCode.VALIDATION_ERROR, 'Task id is required for update operation');
          }
@@ -294,7 +406,7 @@ diff --color -ruN a/dist/tools/tasks/crud.js b/dist/tools/tasks/crud.js
          (0, validation_1.validateId)(args.id, 'id');
          // Validate date if provided
          if (args.dueDate) {
-@@ -237,11 +290,16 @@
+@@ -237,11 +347,16 @@ async function updateTask(args) {
              affectedFields.push('labels');
          if (args.assignees !== undefined)
              affectedFields.push('assignees');
@@ -311,6 +423,25 @@ diff --color -ruN a/dist/tools/tasks/crud.js b/dist/tools/tasks/crud.js
              ...(args.title !== undefined && { title: args.title }),
              ...(args.description !== undefined && { description: args.description }),
              ...(args.dueDate !== undefined && { due_date: args.dueDate }),
+@@ -261,12 +376,14 @@ async function updateTask(args) {
+                 : {}),
+         };
+         await client.tasks.updateTask(args.id, updateData);
+-        // Update labels if provided
++        // Update labels if provided.
++        // `updateTaskLabels` sent `{label_ids: [...]}` to the bulk endpoint,
++        // whose payload Vikunja discards: the server read an empty list, removed
++        // every label, applied none, and still reported success. Add only what
++        // is missing on the individual endpoint so existing labels survive.
+         if (args.labels !== undefined) {
+             try {
+-                await client.tasks.updateTaskLabels(args.id, {
+-                    label_ids: args.labels,
+-                });
++                await addLabelsToTaskAdditive(client, args.id, args.labels);
+             }
+             catch (labelError) {
+                 // Check if it's an auth error
 diff --color -ruN a/dist/tools/tasks/index.js b/dist/tools/tasks/index.js
 --- a/dist/tools/tasks/index.js	1985-10-26 03:15:00.000000000 -0500
 +++ b/dist/tools/tasks/index.js	2026-10-08 22:33:06.843789072 -0400
