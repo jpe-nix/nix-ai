@@ -162,6 +162,10 @@ and adding any required runtime secret injection.
 | Port | Service | Protocol | Module |
 |------|---------|----------|--------|
 | 4100 | Local LiteLLM proxy (loopback only) | HTTP (Anthropic + OpenAI-compatible) | `modules/litellm-local/` |
+| 11428 | Inkling 2 Mini shared resident (mlx-vlm-native, opt-in per host) | HTTP (OpenAI-compatible) | `modules/mlx/` |
+| 11429 | Gemma 4 12B shared resident (mlx-lm, opt-in per host) | HTTP (OpenAI-compatible) | `modules/mlx/` |
+| 11430 | Qwen3-ASR-1.7B shared resident (mlx-audio, opt-in per host) | HTTP (OpenAI-compatible) | `modules/mlx/` |
+| 11431 | Ming-3.0-tts shared resident (mlx-audio, opt-in per host) | HTTP (OpenAI-compatible) | `modules/mlx/` |
 | 11434 | llama-swap proxy | HTTP (OpenAI-compatible) | `modules/mlx/` |
 | 11436+ | MLX model-server workers (mlx-lm) | HTTP (managed by llama-swap) | `modules/mlx/` |
 | 8180 | Fabric REST API (opt-in) | HTTP + Swagger UI | `modules/fabric/` |
