@@ -39,9 +39,22 @@ with tempfile.TemporaryDirectory() as home:
     )
     configs = list(Path(home).rglob("provider_config.json"))
     assert len(configs) == 1, "Native key initializer wrote no unique configuration"
-    selection = json.loads(configs[0].read_text())["config"]["defaultModelSelection"]
+    personal_config = json.loads(configs[0].read_text())["config"]
+    selection = personal_config["defaultModelSelection"]
     assert selection["modelId"] == sys.argv[3], selection
     assert selection["options"]["reasoningLevel"], selection
+    # A default the bundled catalog lacks must be registered as a personal
+    # model id on the coding plan provider, not rejected.
+    builtin_path = package / "lib/zcode/apps/zcode-cli/packages/cli/dist/provider/zcode-builtin.json"
+    builtin_rules = json.loads(builtin_path.read_text())["config"]["providerConfigRules"]["providerRules"]
+    builtin_rule = next(r for r in builtin_rules if r["providerId"] == selection["providerId"])
+    if sys.argv[3] not in builtin_rule["config"].get("builtinModelIds", []):
+        personal_rule = next(
+            r
+            for r in personal_config["providerConfigRules"]["providerRules"]
+            if r["providerId"] == selection["providerId"]
+        )
+        assert sys.argv[3] in personal_rule["config"]["personalModelIds"], personal_rule
     env.update(ZCODE_SERVER_AUTH_TOKEN="offline-smoke-token", PORT="3039")
     with (artifacts / "server.log").open("w") as log:
         server = subprocess.Popen([package / "bin/zcode-web"], env=env, stdout=log, stderr=log)
