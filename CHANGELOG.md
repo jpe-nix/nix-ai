@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.45.0](https://github.com/jpe-nix/nix-ai/compare/v8.44.0...v8.45.0) (2026-11-23)
+
+
+### Features
+
+* **mlx:** serve inkling-2-mini with mlx-lm from PR [#2086](https://github.com/jpe-nix/nix-ai/issues/2086) ([#3157](https://github.com/jpe-nix/nix-ai/issues/3157)) ([1987943](https://github.com/jpe-nix/nix-ai/commit/19879433263827ec60703a0881728cbda5bfc1af))
+
 ## [8.44.0](https://github.com/jpe-nix/nix-ai/compare/v8.43.0...v8.44.0) (2026-11-23)
 
 
