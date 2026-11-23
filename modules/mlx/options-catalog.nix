@@ -118,16 +118,23 @@ let
     name: _sel:
     let
       entry = entryFor name;
-      timeouts = derive.requestTimeouts {
-        contextWindowTokens = capContext entry.contextWindowTokens;
-        inherit (entry)
-          maxOutputTokens
-          queueSize
-          prefillTokensPerSecond
-          decodeTokensPerSecond
-          ;
-        concurrency = servedConcurrency entry;
-      };
+      timeouts =
+        if entry ? fixedTimeoutSeconds then
+          {
+            requestTimeoutSeconds = entry.fixedTimeoutSeconds;
+            pipeTimeoutSeconds = 2 * entry.fixedTimeoutSeconds;
+          }
+        else
+          derive.requestTimeouts {
+            contextWindowTokens = capContext entry.contextWindowTokens;
+            inherit (entry)
+              maxOutputTokens
+              queueSize
+              prefillTokensPerSecond
+              decodeTokensPerSecond
+              ;
+            concurrency = servedConcurrency entry;
+          };
       roles = lib.filterAttrs (_: model: model == entry.model) config.services.aiStack.models;
     in
     lib.nameValuePair entry.model {
@@ -147,6 +154,7 @@ let
       timeoutSeconds = timeouts.requestTimeoutSeconds;
       inherit (timeouts) pipeTimeoutSeconds;
       inherit roles;
+      mode = entry.mode or null;
     }
   ) (lib.filterAttrs (name: sel: sel.class == "resident" && (entryFor name) ? servicePort) enabled);
 in
@@ -255,6 +263,15 @@ in
       modelBackends = lib.mapAttrs' (
         name: _sel: lib.nameValuePair (entryFor name).model (lib.mkDefault (entryFor name).backend)
       ) (lib.filterAttrs (name: _sel: (entryFor name) ? backend) enabled);
+
+      # Native mlx-vlm servers bound each stream's KV cache with --max-kv-size,
+      # carried by the MTP profile. Set it per entry without enabling MTP.
+      modelMtpProfiles = lib.mapAttrs' (
+        name: _sel:
+        lib.nameValuePair (entryFor name).model {
+          maxKvTokens = lib.mkDefault (entryFor name).maxKvTokens;
+        }
+      ) (lib.filterAttrs (name: _sel: (entryFor name) ? maxKvTokens) enabled);
 
       modelRevisions = lib.mapAttrs' (
         name: _sel:
