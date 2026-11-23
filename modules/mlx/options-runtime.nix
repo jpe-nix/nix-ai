@@ -187,7 +187,7 @@
           "mlx-community/<model>" = "0123456789abcdef0123456789abcdef01234567";
         }
       '';
-      description = "Exact Hugging Face commit revisions for selected models. Pinned models load from that cached snapshot path and never resolve a moving repository ref at serve time.";
+      description = "Exact Hugging Face commit revisions for selected models. Pinned models load from that cached snapshot path and never resolve a moving repository ref at serve time. mlx-audio models take no revision: mlx_audio.server loads the repo id a request names, so a revision on one fails evaluation.";
     };
 
     # modelConcurrencyLimits — per-physical-id MLX worker decode/prompt
