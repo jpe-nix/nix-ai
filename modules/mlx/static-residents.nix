@@ -118,6 +118,8 @@ let
           ProcessType = cfg.processType;
           AbandonProcessGroup = false;
           EnvironmentVariables = env;
+          # launchd starts in read-only /; servers that write relative paths (mlx_audio's logs/) need a writable cwd.
+          WorkingDirectory = logDir;
           StandardOutPath = "${logDir}/${key}.log";
           StandardErrorPath = "${logDir}/${key}.error.log";
         };
