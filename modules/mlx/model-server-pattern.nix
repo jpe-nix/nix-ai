@@ -43,12 +43,14 @@
   lib,
   cfg,
   mlxLmServer,
+  mlxLmPrServer,
   mlxVlmServer,
   mlxAudioServer,
 }:
 let
   patterns = {
     mlx-lm = lib.escapeRegex mlxLmServer.launchScriptBasename;
+    mlx-lm-pr = lib.escapeRegex mlxLmPrServer.launchScriptBasename;
     # The per-model VLM adapter runs as a script path in uvx argv.
     mlx-vlm = lib.escapeRegex mlxVlmServer.launchScriptBasename;
     mlx-vlm-native = lib.escapeRegex mlxVlmServer.nativeLaunchScriptBasename;

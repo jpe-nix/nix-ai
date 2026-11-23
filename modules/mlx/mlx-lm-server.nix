@@ -21,6 +21,7 @@
   pkgs,
   cfg,
   versions,
+  uvPythonVersion ? (import ../../lib/python.nix { inherit pkgs; }).pythonVersion,
 }:
 let
   inherit (pkgs) lib;
@@ -71,6 +72,12 @@ let
   rawScript = builtins.readFile ./scripts/mlx-lm-server.sh;
 in
 {
+  prPkg = pkgs.writeShellScriptBin "mlx-lm-pr-server" ''
+    exec ${pkgs.uv}/bin/uvx --python ${uvPythonVersion} --from "${versions.mlxLmPrInstallSpec}" python -m mlx_lm.server "$@"
+  '';
+
+  prLaunchScriptBasename = "mlx-lm-pr-server";
+
   pkg = pkgs.writeShellApplication {
     name = "mlx-lm-server";
     # replaceVars failed loudly when a placeholder went missing. Keep that:

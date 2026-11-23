@@ -126,6 +126,26 @@ rec {
         "--prefill-step-size"
         (toString c.prefillBatchSize)
       ];
+      # This list is pinned to the PR-head server CLI. Keep it distinct from
+      # released mlx-lm so future official flag changes cannot leak here.
+      mlxLmPrFlags = [
+        "--log-level"
+        mlxLmLogLevel
+        "--max-tokens"
+        (toString effectiveMlxLmMaxTokens)
+        "--decode-concurrency"
+        (toString (effectiveConcurrency modelId))
+        "--prompt-concurrency"
+        (toString (effectiveConcurrency modelId))
+        "--prompt-cache-size"
+        (toString (c.promptCacheSize or 16))
+        "--prompt-cache-bytes"
+        (toString (effectiveMlxLmCacheMb * 1024 * 1024))
+      ]
+      ++ lib.optionals (c.prefillBatchSize != null) [
+        "--prefill-step-size"
+        (toString c.prefillBatchSize)
+      ];
       mlxVlmFlags = [ "--trust-remote-code" ];
       mlxVlmNativeFlags = [
         "--trust-remote-code"
@@ -155,6 +175,7 @@ rec {
       mlxModelServerFlags =
         {
           mlx-lm = mlxLmFlags;
+          mlx-lm-pr = mlxLmPrFlags;
           mlx-vlm = mlxVlmFlags;
           mlx-vlm-native = mlxVlmNativeFlags;
           mlx-audio = [ ];

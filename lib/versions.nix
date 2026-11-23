@@ -108,6 +108,9 @@ in
     in
     "${package.name} @ ${package.source.url}";
   mlxAudioInstallSpec = "mlx-audio==${uvLock.version "mlx-audio"}";
+  # Temporary backend for models needing mlx-lm#2086; remove once a release supports them.
+  # renovate: datasource=git-refs depName=https://github.com/jundot/mlx-lm packageName=https://github.com/jundot/mlx-lm currentValue=inkling2-mini extractVersion=^(?<version>.*)$
+  mlxLmPrInstallSpec = "mlx-lm @ git+https://github.com/jundot/mlx-lm.git@e2b5bbd3bd9d186dea895e60802aa765e70b9d93";
   mlx = uvLock.version "mlx";
   mlxLm = uvLock.version "mlx-lm";
   transformers = uvLock.version "transformers";
