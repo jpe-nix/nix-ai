@@ -192,7 +192,10 @@ let
 
 in
 {
-  imports = [ ./options.nix ];
+  imports = [
+    ./options.nix
+    ./options-health.nix
+  ];
 
   config = lib.mkMerge [
     # Set unconditionally so a flake check can read the rendered config (and

@@ -1,7 +1,7 @@
 # Local LiteLLM Proxy — Option Declarations
 #
-# All `options.programs.litellmLocal` declarations live here, mirroring the
-# per-module options.nix split used by fabric and the other agent modules.
+# `options.programs.litellmLocal` declarations; health checks are in
+# options-health.nix.
 {
   config,
   lib,
@@ -248,17 +248,6 @@ in
         here; 11434 is the MLX endpoint and 11435 is reserved for a macOS app.
 
         Client URLs read services.aiStack.localRouterUrl.
-      '';
-    };
-
-    backgroundHealthChecks = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = ''
-        Run LiteLLM background health checks on every route, each
-        health_check_interval seconds (300). A check sends a real request
-        upstream: an audio route sends a short transcription or speech request
-        on every interval. Off by default.
       '';
     };
 
