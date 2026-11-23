@@ -21,9 +21,12 @@ let
     && builtins.elem backend [
       "mlx-lm"
       "mlx-vlm"
+      "mlx-vlm-native"
     ]
     && (serving.endpoint or null) == "/v1/chat/completions";
+  # Speech residents serve the audio endpoints instead of chat completions.
+  mlxAudio = backend == "mlx-audio";
 in
 {
-  inherit serving mlxChat;
+  inherit serving mlxChat mlxAudio;
 }
