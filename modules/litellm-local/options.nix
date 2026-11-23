@@ -251,6 +251,17 @@ in
       '';
     };
 
+    backgroundHealthChecks = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Run LiteLLM background health checks on every route, each
+        health_check_interval seconds (300). A check sends a real request
+        upstream: an audio route sends a short transcription or speech request
+        on every interval. Off by default.
+      '';
+    };
+
     clientToken = lib.mkOption {
       type = lib.types.str;
       readOnly = true;
