@@ -26,6 +26,7 @@
     type = lib.types.attrsOf (
       lib.types.enum [
         "mlx-lm"
+        "mlx-lm-pr"
         "mlx-vlm"
         "mlx-vlm-native"
         "mlx-audio"

@@ -21,7 +21,12 @@ let
   uvPythonVersion = (import ../../lib/python.nix { inherit pkgs; }).pythonVersion;
 
   mlxLmServer = import ./mlx-lm-server.nix {
-    inherit pkgs cfg versions;
+    inherit
+      pkgs
+      cfg
+      versions
+      uvPythonVersion
+      ;
   };
   mlxVlmServer = import ./mlx-vlm-server.nix {
     inherit pkgs mlxVlmInstallSpec uvPythonVersion;
@@ -29,8 +34,13 @@ let
   mlxAudioServer = import ./mlx-audio-server.nix {
     inherit pkgs mlxAudioInstallSpec uvPythonVersion;
   };
+  mlxLmPrServer = {
+    pkg = mlxLmServer.prPkg;
+    launchScriptBasename = mlxLmServer.prLaunchScriptBasename;
+  };
   mlxModelServerPkgs = {
     mlx-lm = mlxLmServer.pkg;
+    mlx-lm-pr = mlxLmPrServer.pkg;
     mlx-vlm = mlxVlmServer.pkg;
     mlx-vlm-native = mlxVlmServer.nativePkg;
     mlx-audio = mlxAudioServer.pkg;
@@ -58,6 +68,7 @@ let
         lib
         cfg
         mlxLmServer
+        mlxLmPrServer
         mlxVlmServer
         mlxAudioServer
         ;

@@ -10,13 +10,13 @@ let
   tts = modelCatalog."mlx-community/Ming-3.0-tts-0.5B-8bit".profiles.mlx;
 in
 {
-  # mlx-vlm native server. The per-stream KV window is capped with
-  # --max-kv-size through maxKvTokens. Prefill and decode are copied from the
-  # measured Qwen3.8-27B row, a dense model slower than this 3.4B-active MoE.
+  # mlx-lm PR #2086 adds inkling2_loop support. Prefill and decode are copied
+  # from the measured Qwen3.8-27B row, a dense model slower than this
+  # 3.4B-active MoE.
   inkling-2-mini = {
     model = "mlx-community/Inkling-2-Mini-4bit";
     revision = "9c0e2960609ba7cb40daf92c6f7bf8ed56e1dd62";
-    backend = "mlx-vlm-native";
+    backend = "mlx-lm-pr";
     weightGb = 17.31;
     contextWindowTokens = inkling.context_window;
     maxOutputTokens = 8192;
@@ -24,7 +24,6 @@ in
     queueSize = 25;
     prefillTokensPerSecond = 150;
     decodeTokensPerSecond = 17;
-    maxKvTokens = 65536;
     servicePort = 11428;
     args = [ ];
     classes.resident = { };

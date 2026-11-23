@@ -13,6 +13,13 @@
         '# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+) packageName=(?<packageName>\\S+) currentValue=(?<currentValue>\\S+) extractVersion=(?<extractVersion>\\S+)\\n\\s+"mlx-vlm @ https://github\\.com/Blaizzy/mlx-vlm/archive/(?<currentDigest>[a-f0-9]{40})\\.zip"',
       ],
     },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^lib\\/versions\\.nix$/"],
+      "matchStrings": [
+        '# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+) packageName=(?<packageName>\\S+) currentValue=(?<currentValue>\\S+) extractVersion=(?<extractVersion>\\S+)\\n\\s*mlxLmPrInstallSpec = "mlx-lm @ git\\+https://github\\.com/jundot/mlx-lm\\.git@(?<currentDigest>[a-f0-9]{40})";',
+      ],
+    },
   ],
   "packageRules": [
     {
