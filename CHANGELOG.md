@@ -1,5 +1,19 @@
 # Changelog
 
+## [8.43.0](https://github.com/jpe-nix/nix-ai/compare/v8.42.0...v8.43.0) (2026-11-23)
+
+
+### Features
+
+* **claude:** let the delegation hook pick the Qwen sandbox tool ([#3079](https://github.com/jpe-nix/nix-ai/issues/3079)) ([83c1b19](https://github.com/jpe-nix/nix-ai/commit/83c1b19804736f0d3a69c7c7e593876246170544))
+* **mlx:** shared Inkling, Gemma, ASR and TTS residents ([#3145](https://github.com/jpe-nix/nix-ai/issues/3145)) ([58f78b3](https://github.com/jpe-nix/nix-ai/commit/58f78b31f54fecf84e499f7c7af52900f81d02f6))
+
+
+### Bug Fixes
+
+* **litellm-local:** remove fallback-watch agent and treat slot saturation as busy ([#3080](https://github.com/jpe-nix/nix-ai/issues/3080)) ([9492c26](https://github.com/jpe-nix/nix-ai/commit/9492c26ed29e9ed5290cf589a1e4c6db7e2b9803))
+* **mlx:** accept native mlx-vlm and mlx-audio residents in the role map ([#3146](https://github.com/jpe-nix/nix-ai/issues/3146)) ([00125bd](https://github.com/jpe-nix/nix-ai/commit/00125bd95ecd215018cd41c37d85fda6207e983e))
+
 ## [8.42.0](https://github.com/jpe-nix/nix-ai/compare/v8.41.2...v8.42.0) (2026-11-22)
 
 
