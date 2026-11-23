@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.48.1](https://github.com/jpe-nix/nix-ai/compare/v8.48.0...v8.48.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **mlx:** give resident agents a writable working directory ([#3177](https://github.com/jpe-nix/nix-ai/issues/3177)) ([d317a00](https://github.com/jpe-nix/nix-ai/commit/d317a00d27bd9466f2fc3043002c45a1cc64040e))
+
 ## [8.48.0](https://github.com/jpe-nix/nix-ai/compare/v8.47.0...v8.48.0) (2026-11-23)
 
 
