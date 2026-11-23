@@ -1,5 +1,13 @@
 # Changelog
 
+## [8.47.0](https://github.com/jpe-nix/nix-ai/compare/v8.46.0...v8.47.0) (2026-11-23)
+
+
+### Features
+
+* **agent:** opencode-qwen run j-50745567f4dc1ba5 ([5277065](https://github.com/jpe-nix/nix-ai/commit/5277065704a8163120952a1488bc23f707084041))
+* **zcode:** default to GLM-5.4 through a personal model rule ([#3164](https://github.com/jpe-nix/nix-ai/issues/3164)) ([5277065](https://github.com/jpe-nix/nix-ai/commit/5277065704a8163120952a1488bc23f707084041))
+
 ## [8.46.0](https://github.com/jpe-nix/nix-ai/compare/v8.45.0...v8.46.0) (2026-11-23)
 
 
