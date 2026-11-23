@@ -22,6 +22,7 @@ in
       "features"
       "hooks"
       "model"
+      "modelFamily"
       "modelProvider"
       "modelReasoningEffort"
       "modelVerbosity"
@@ -244,8 +245,8 @@ in
       ''
                 jq -e '
                   .models == [{
-                    slug: "glm-5.3",
-                    display_name: "glm-5.3",
+                    slug: "glm-5.4",
+                    display_name: "glm-5.4",
                     description: "Z.ai flagship coding model",
                     default_reasoning_level: "max",
                     supported_reasoning_levels: [
@@ -272,7 +273,7 @@ in
                   }]
                 ' "$catalogPath" >/dev/null
 
-                grep -Fq 'model = "glm-5.3"' ${profile}
+                grep -Fq 'model = "glm-5.4"' ${profile}
                 grep -Fq 'model_provider = "ZAI"' ${profile}
                 grep -Fq 'model_reasoning_effort = "max"' ${profile}
                 grep -Fq 'model_catalog_json = "'"$expectedCatalogPath"'"' ${profile}
@@ -292,7 +293,7 @@ in
         with open(profile_path, "rb") as f:
             cfg = tomllib.load(f)
 
-        assert cfg["model"] == "glm-5.3", cfg.get("model")
+        assert cfg["model"] == "glm-5.4", cfg.get("model")
         assert cfg["model_provider"] == "ZAI", cfg.get("model_provider")
         assert cfg["model_reasoning_effort"] == "max", cfg.get("model_reasoning_effort")
         assert cfg["model_catalog_json"] == expected_catalog, cfg.get("model_catalog_json")

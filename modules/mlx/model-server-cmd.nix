@@ -51,10 +51,22 @@ rec {
             lib.replaceStrings [ "/" ] [ "--" ] modelId
           }/snapshots/${revision}";
       backend = backendFor modelId;
+      # mlx_audio.server has no --model flag and loads the repo id a request names.
+      modelFlag =
+        if backend != "mlx-audio" then
+          [
+            "--model"
+            modelArg
+          ]
+        else if revision == null then
+          [ ]
+        else
+          throw "programs.mlx.modelRevisions.\"${modelId}\": mlx-audio serves the repo id and cannot load a pinned revision.";
       mtp =
         cfg.modelMtpProfiles.${modelId} or {
           enable = false;
           drafterModel = null;
+          draftKind = "mtp";
           maxKvTokens = 131072;
           maxNumSeqs = 1;
           tokenQueueTimeoutSeconds = 1800;
@@ -114,6 +126,26 @@ rec {
         "--prefill-step-size"
         (toString c.prefillBatchSize)
       ];
+      # This list is pinned to the PR-head server CLI. Keep it distinct from
+      # released mlx-lm so future official flag changes cannot leak here.
+      mlxLmPrFlags = [
+        "--log-level"
+        mlxLmLogLevel
+        "--max-tokens"
+        (toString effectiveMlxLmMaxTokens)
+        "--decode-concurrency"
+        (toString (effectiveConcurrency modelId))
+        "--prompt-concurrency"
+        (toString (effectiveConcurrency modelId))
+        "--prompt-cache-size"
+        (toString (c.promptCacheSize or 16))
+        "--prompt-cache-bytes"
+        (toString (effectiveMlxLmCacheMb * 1024 * 1024))
+      ]
+      ++ lib.optionals (c.prefillBatchSize != null) [
+        "--prefill-step-size"
+        (toString c.prefillBatchSize)
+      ];
       mlxVlmFlags = [ "--trust-remote-code" ];
       mlxVlmNativeFlags = [
         "--trust-remote-code"
@@ -122,14 +154,20 @@ rec {
         "--max-kv-size"
         (toString mtp.maxKvTokens)
       ]
-      ++ lib.optionals mtp.enable [
-        "--draft-model"
-        mtp.drafterModel
-        "--draft-kind"
-        "mtp"
-        "--max-num-seqs"
-        (toString mtp.maxNumSeqs)
-      ]
+      ++ lib.optionals mtp.enable (
+        [
+          "--draft-model"
+          mtp.drafterModel
+        ]
+        ++ lib.optionals (mtp.draftKind != null) [
+          "--draft-kind"
+          mtp.draftKind
+        ]
+        ++ [
+          "--max-num-seqs"
+          (toString mtp.maxNumSeqs)
+        ]
+      )
       ++ lib.optionals (mtp.enable && mtp.draftBlockSize != null) [
         "--draft-block-size"
         (toString mtp.draftBlockSize)
@@ -137,14 +175,15 @@ rec {
       mlxModelServerFlags =
         {
           mlx-lm = mlxLmFlags;
+          mlx-lm-pr = mlxLmPrFlags;
           mlx-vlm = mlxVlmFlags;
           mlx-vlm-native = mlxVlmNativeFlags;
+          mlx-audio = [ ];
         }
         .${backend};
     in
-    [
-      "--model"
-      modelArg
+    modelFlag
+    ++ [
       "--port"
       (toString port)
       "--host"

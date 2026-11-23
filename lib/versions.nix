@@ -107,6 +107,11 @@ in
       package = uvLock.package "mlx-vlm";
     in
     "${package.name} @ ${package.source.url}";
+  # The server extra carries uvicorn and fastapi; stt and tts carry the model loaders.
+  mlxAudioInstallSpec = "mlx-audio[server,stt,tts]==${uvLock.version "mlx-audio"}";
+  # Temporary backend for models needing mlx-lm#2086; remove once a release supports them.
+  # renovate: datasource=git-refs depName=https://github.com/jundot/mlx-lm packageName=https://github.com/jundot/mlx-lm currentValue=inkling2-mini extractVersion=^(?<version>.*)$
+  mlxLmPrInstallSpec = "mlx-lm @ git+https://github.com/jundot/mlx-lm.git@e2b5bbd3bd9d186dea895e60802aa765e70b9d93";
   mlx = uvLock.version "mlx";
   mlxLm = uvLock.version "mlx-lm";
   transformers = uvLock.version "transformers";
@@ -118,7 +123,7 @@ in
 
   # AI tools (pypi)
   # renovate: datasource=pypi depName=browser-use
-  browserUse = "0.13.14";
+  browserUse = "1.0.4";
   # The loopback proxy (modules/litellm-local). Runs from uvx rather than
   # nixpkgs so it tracks the upstream release train; nixpkgs lags by months
   # and builds it from source with a large test closure.

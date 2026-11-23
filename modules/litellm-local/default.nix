@@ -186,14 +186,16 @@ let
   };
   inherit (commands)
     fallbackProbe
-    fallbackWatch
     aliasSubsetCheck
     proxyScript
     ;
 
 in
 {
-  imports = [ ./options.nix ];
+  imports = [
+    ./options.nix
+    ./options-health.nix
+  ];
 
   config = lib.mkMerge [
     # Set unconditionally so a flake check can read the rendered config (and
@@ -238,7 +240,6 @@ in
           cfg
           aiStack
           proxyScript
-          fallbackWatch
           telemetryTracesEndpoint
           ;
       };

@@ -1,0 +1,76 @@
+# Agent CI Fix — handle pull request CI failures with the shared OIDC fixer.
+
+name: Agent CI Fix
+
+# A failed CI Gate run, or a dispatch with failure_run_id, starts the CI fix. A dispatch with conflict_pr starts the
+# conflict fix, which opens a v2 pull request on the current base.
+on:
+  workflow_run:
+    workflows: ["CI Gate"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      failure_run_id:
+        description: ID of the failed run
+        type: string
+        default: ""
+      failure_head_branch:
+        description: Head branch of the failed run
+        type: string
+        default: ""
+      conflict_pr:
+        description: Number of a conflicted pull request
+        type: string
+        default: ""
+
+permissions: {}
+
+jobs:
+  ci-fix:
+    if: >-
+      vars.AI_AGENT_CI_FIX_ENABLED == 'true' && (
+        (github.event_name == 'workflow_dispatch' && inputs.conflict_pr == '') ||
+        (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'pull_request'
+          && github.event.workflow_run.head_repository.full_name == github.repository))
+    permissions:
+      actions: read
+      contents: write
+      id-token: write
+      issues: write
+      pull-requests: write
+    uses: JacobPEvans/.github-ai/.github/workflows/cc-ci-fix-oidc.yml@v2
+    with:
+      runner_label: review
+      repo_context: This repository provides Nix home-manager modules for AI coding tools, agent configuration, MCP servers, and MLX inference.
+      ci_structure: CI Gate runs Nix validation, repository policy checks, security scans, Darwin checks, flake-lock freshness, and lane-alias parity before aggregating into Merge Gate.
+      daily_run_limit: "5"
+      local_only: true
+      local_model: review-local
+      dry_run: ${{ vars.AI_AGENT_CI_FIX_DRY_RUN != 'false' }}
+      failure_run_id: ${{ inputs.failure_run_id }}
+      failure_head_branch: ${{ inputs.failure_head_branch }}
+      # Empty on workflow_run, where the called workflow reads the event instead.
+      failure_conclusion: ${{ inputs.failure_run_id != '' && 'failure' || '' }}
+      failure_head_repository: ${{ inputs.failure_run_id != '' && github.repository || '' }}
+    secrets:
+      LLM_ROUTER_BASE_URL: ${{ secrets.LLM_ROUTER_BASE_URL }}
+      OPENBAO_ADDR: ${{ secrets.OPENBAO_ADDR }}
+
+  conflict-fix:
+    if: vars.AI_AGENT_CI_FIX_ENABLED == 'true' && github.event_name == 'workflow_dispatch' && inputs.conflict_pr != ''
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    uses: JacobPEvans/.github-ai/.github/workflows/cc-conflict-fix.yml@v2
+    with:
+      conflict_pr: ${{ inputs.conflict_pr }}
+      runner_label: review
+      local_model: review-local
+      repo_context: This repository provides Nix home-manager modules for AI coding tools, agent configuration, MCP servers, and MLX inference.
+      ci_structure: CI Gate runs Nix validation, repository policy checks, security scans, Darwin checks, flake-lock freshness, and lane-alias parity before aggregating into Merge Gate.
+      dry_run: ${{ vars.AI_AGENT_CI_FIX_DRY_RUN != 'false' }}
+    secrets:
+      LLM_ROUTER_BASE_URL: ${{ secrets.LLM_ROUTER_BASE_URL }}
+      LLM_ROUTER_API_KEY: ${{ secrets.LLM_ROUTER_API_KEY }}
+      OPENBAO_ADDR: ${{ secrets.OPENBAO_ADDR }}
