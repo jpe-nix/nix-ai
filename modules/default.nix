@@ -125,6 +125,7 @@ in
     ./mcp/module.nix
     ./mlx
     ./opencode
+    ./openwhispr.nix
     ./orca
     ./qwen-code
     ./session-archive.nix
