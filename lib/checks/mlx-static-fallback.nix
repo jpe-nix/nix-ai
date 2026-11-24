@@ -90,7 +90,13 @@ in
       groups = renderedConfig.router_settings.routing_groups or [ ];
       aliases = renderedConfig.router_settings.model_group_alias or { };
       groupFor = role: lib.findFirst (g: g.group_name == (aliases.${role} or role)) null groups;
-      residentOf = role: builtins.head (groupFor role).models;
+      # null when the role has no group, so a missing group reaches the throw below.
+      residentOf =
+        role:
+        let
+          group = groupFor role;
+        in
+        if group == null || group.models == [ ] then null else builtins.head group.models;
       sharesWorker =
         role:
         let
