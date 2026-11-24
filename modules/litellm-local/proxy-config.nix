@@ -20,6 +20,8 @@
   staticTier ? {
     routes = [ ];
     routerRungs = [ ];
+    routingGroups = [ ];
+    modelGroupAlias = { };
     fallbacks = [ ];
     contextWindowFallbacks = [ ];
   },
@@ -84,6 +86,14 @@ in
       RateLimitErrorRetries = 0;
       TimeoutErrorRetries = 0;
     };
+  }
+  // lib.optionalAttrs (staticTier.routingGroups != [ ]) {
+    # Resident roles: each is a priority group over its worker's shared
+    # deployment and its own router rung (static-tier.nix).
+    routing_groups = staticTier.routingGroups;
+  }
+  // lib.optionalAttrs (staticTier.modelGroupAlias != { }) {
+    model_group_alias = staticTier.modelGroupAlias;
   }
   // lib.optionalAttrs hostServed {
     # Static resident aliases and host-served rungs are singleton or near-singleton

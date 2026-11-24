@@ -58,8 +58,9 @@ let
     asr
     tts
   ];
-  routes = hm.config.programs.litellmLocal.renderedConfig.model_list;
-  routeFor = name: lib.findFirst (route: route.model_name == name) null routes;
+  routeFor =
+    (import ./helpers.nix { inherit pkgs; }).routeFor
+      hm.config.programs.litellmLocal.renderedConfig;
   allAssertionsHold = lib.all (a: a.assertion) hm.config.assertions;
 in
 {

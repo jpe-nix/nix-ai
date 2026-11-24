@@ -61,4 +61,18 @@ in
     in
     assert failures == [ ] || throw "${label} default value regression:\n${failureMsg}";
     mkMarker checkName "${label} defaults regression: ${toString (length checks)} critical defaults verified";
+
+  # The deployment a rendered LiteLLM config serves a name from: the first
+  # member of the routing group of that name (through model_group_alias), else
+  # the model_list entry of that name, else null.
+  routeFor =
+    renderedConfig: name:
+    let
+      inherit (pkgs.lib) findFirst;
+      settings = renderedConfig.router_settings or { };
+      groupName = (settings.model_group_alias or { }).${name} or name;
+      group = findFirst (g: g.group_name == groupName) null (settings.routing_groups or [ ]);
+      deploymentName = if group == null then name else builtins.head group.models;
+    in
+    findFirst (route: route.model_name == deploymentName) null renderedConfig.model_list;
 }
