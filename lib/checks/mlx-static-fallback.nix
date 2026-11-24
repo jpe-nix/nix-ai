@@ -9,8 +9,7 @@ let
   inherit (pkgs) lib;
   helpers = import ./helpers.nix { inherit pkgs; };
   inherit (hmConfigStaticServing.config.programs.litellmLocal) renderedConfig;
-  routeFor =
-    name: builtins.head (builtins.filter (route: route.model_name == name) renderedConfig.model_list);
+  routeFor = helpers.routeFor renderedConfig;
   rungFor = name: lib.findFirst (route: route.model_name == name) null renderedConfig.model_list;
   fallbackFor =
     group: lib.findFirst (entry: entry ? ${group}) null renderedConfig.litellm_settings.fallbacks;
@@ -83,4 +82,42 @@ in
       helpers.mkMarker "check-mlx-static-no-thinking-alias" "small-no-thinking shares the small resident's deployment and sends thinking-off per request; its overflow and router fallback forward small with the same body, and small keeps the worker default"
     else
       throw "small-no-thinking must mirror the small route with extra_body enable_thinking = false, fall back to small-no-thinking-homelab, which forwards small with the same body; small must carry no extra_body";
+
+  # Every role on one worker shares that worker's one deployment, so its slot
+  # count covers all of them, and each role tries the worker before its rung.
+  mlx-static-shared-resident-slots =
+    let
+      groups = renderedConfig.router_settings.routing_groups or [ ];
+      aliases = renderedConfig.router_settings.model_group_alias or { };
+      groupFor = role: lib.findFirst (g: g.group_name == (aliases.${role} or role)) null groups;
+      residentOf = role: builtins.head (groupFor role).models;
+      sharesWorker =
+        role:
+        let
+          group = groupFor role;
+        in
+        group != null
+        && group.routing_strategy == "priority"
+        &&
+          group.models == [
+            (residentOf "small")
+            "${role}-homelab"
+          ]
+        && group.model_priorities.${residentOf "small"} < group.model_priorities."${role}-homelab";
+      smallWorkerRoles = builtins.attrNames small9b.roles;
+      notShared = builtins.filter (role: !(sharesWorker role)) smallWorkerRoles;
+    in
+    if
+      smallWorkerRoles != [ ]
+      && notShared == [ ]
+      # LiteLLM refuses to start with a group named after its reserved "default" group.
+      && !(builtins.any (g: g.group_name == "default") groups)
+      && small.litellm_params.max_parallel_requests == small9b.concurrency
+      &&
+        builtins.length (builtins.filter (r: r.model_name == residentOf "small") renderedConfig.model_list)
+        == 1
+    then
+      helpers.mkMarker "check-mlx-static-shared-resident-slots" "every role on the small worker is a priority group over one shared deployment, then its own router rung"
+    else
+      throw "every role on a resident worker must be a priority routing group over that worker's single deployment, then <role>-homelab; not shared: ${builtins.toJSON notShared}";
 }

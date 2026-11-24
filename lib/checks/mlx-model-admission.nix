@@ -31,13 +31,7 @@ let
       };
     }
   ];
-  defaultRoute =
-    config:
-    builtins.head (
-      builtins.filter (
-        route: route.model_name == "default"
-      ) config.programs.litellmLocal.renderedConfig.model_list
-    );
+  defaultRoute = config: helpers.routeFor config.programs.litellmLocal.renderedConfig "default";
   baselineRoute = defaultRoute staticConfig;
   overrideRoute = defaultRoute overrideConfig.config;
 
