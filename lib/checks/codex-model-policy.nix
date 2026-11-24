@@ -12,6 +12,10 @@ let
   codexProfileSources = map (
     path: (builtins.getAttr path hmConfig.config.home.file).source
   ) codexProfilePaths;
+  # The policy's primary target is config.toml itself, and the activation merge
+  # deploys it rather than home.file, so recover its store path from the
+  # activation script the same way codex-credential-store does.
+  configTomlActivation = hmConfig.config.home.activation.codexConfigMerge.data;
 in
 {
   # Apply the OpenAI model policy to OpenAI profiles; Z.ai and LiteLLM profiles keep their provider settings.
@@ -22,10 +26,20 @@ in
     assert cfg.planModeReasoningEffort == "xhigh";
     pkgs.runCommand "check-codex-openai-model-policy"
       {
-        nativeBuildInputs = [ pkgs.python3 ];
+        nativeBuildInputs = [
+          pkgs.gnugrep
+          pkgs.python3
+        ];
+        activation = configTomlActivation;
+        passAsFile = [ "activation" ];
       }
       ''
-        python3 - ${pkgs.lib.escapeShellArgs (map toString codexProfileSources)} <<'PYEOF'
+        configToml=$(grep -m1 -oE '/nix/store/[^"[:space:]]*codex-config\.toml' "$activationPath")
+        if [ -z "$configToml" ]; then
+          echo "FAIL: the codex activation script references no codex-config.toml" >&2
+          exit 1
+        fi
+        python3 - "$configToml" ${pkgs.lib.escapeShellArgs (map toString codexProfileSources)} <<'PYEOF'
         import sys
         import tomllib
 
@@ -38,11 +52,20 @@ in
             if provider is not None and provider.lower() != "openai":
                 continue
 
-            assert profile.get("model", "").endswith("-luna"), profile_path
+            # model is rendered only when programs.codex.model is set; otherwise
+            # the Luna slug resolves at activation from Codex's own model cache.
+            model = profile.get("model")
+            if model is not None:
+                assert model.endswith("-luna"), profile_path
             assert profile.get("model_reasoning_effort") == "xhigh", profile_path
             checked += 1
 
-        print(f"codex-openai-model-policy: {checked} OpenAI profiles use Luna at xhigh")
+        assert checked > 0, (
+            "no OpenAI-provider Codex config or profile was checked; "
+            "the scan never reached config.toml and every profile was skipped"
+        )
+
+        print(f"codex-openai-model-policy: {checked} OpenAI configs/profiles use Luna at xhigh")
         PYEOF
         touch $out
       '';
