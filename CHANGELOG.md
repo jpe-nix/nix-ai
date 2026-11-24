@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.50.1](https://github.com/jpe-nix/nix-ai/compare/v8.50.0...v8.50.1) (2026-11-24)
+
+
+### Bug Fixes
+
+* route the recorder small role through small-no-thinking ([#3188](https://github.com/jpe-nix/nix-ai/issues/3188)) ([14132e8](https://github.com/jpe-nix/nix-ai/commit/14132e8419eb4631f668207a4507081d038b0f32))
+
 ## [8.50.0](https://github.com/jpe-nix/nix-ai/compare/v8.49.0...v8.50.0) (2026-11-24)
 
 
