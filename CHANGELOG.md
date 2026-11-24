@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.48.2](https://github.com/jpe-nix/nix-ai/compare/v8.48.1...v8.48.2) (2026-11-24)
+
+
+### Bug Fixes
+
+* **codex:** scan the rendered config.toml in codex-openai-model-policy ([#3172](https://github.com/jpe-nix/nix-ai/issues/3172)) ([b856d42](https://github.com/jpe-nix/nix-ai/commit/b856d4287a78415cadad64163180d6b2f956cfe2))
+
 ## [8.48.1](https://github.com/jpe-nix/nix-ai/compare/v8.48.0...v8.48.1) (2026-11-23)
 
 
