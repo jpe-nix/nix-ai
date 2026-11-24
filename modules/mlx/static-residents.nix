@@ -32,9 +32,12 @@ let
   ghGuardModelId = byRole.default or byRole.judge or null;
   ghGuardContract = if ghGuardModelId == null then { } else contracts.${ghGuardModelId};
   routerUrl = config.services.aiStack.localRouterUrl;
+  # Screenpipe pipes run as tool-using agents. With thinking on, the small
+  # resident spends the turn after a tool result reasoning until it hits its
+  # output limit, so the recorder's small role uses the no-thinking route.
   recorderModels = {
     medium = "medium";
-    small = "small";
+    small = "small-no-thinking";
   };
   recorderSourceRoles = {
     medium = byRole.default;
@@ -57,7 +60,7 @@ let
         aliases = builtins.attrNames contract.roles;
       }
     ) contracts;
-    aliases = byRole // recorderSourceRoles;
+    aliases = byRole // recorderSourceRoles // { small-no-thinking = byRole.fast; };
     clients = {
       ghGuard = lib.optionalAttrs (ghGuardModelId != null) {
         url = "${consumerConfig.models.${ghGuardModelId}.baseUrl}/chat/completions";
