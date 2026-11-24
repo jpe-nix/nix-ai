@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.50.0](https://github.com/jpe-nix/nix-ai/compare/v8.49.0...v8.50.0) (2026-11-24)
+
+
+### Features
+
+* share one resident slot pool across roles with instant router fallback ([#3185](https://github.com/jpe-nix/nix-ai/issues/3185)) ([1c1a79f](https://github.com/jpe-nix/nix-ai/commit/1c1a79fe87bff3fb4566b8a3f4cb23d1025da8ac))
+
 ## [8.49.0](https://github.com/jpe-nix/nix-ai/compare/v8.48.2...v8.49.0) (2026-11-24)
 
 
