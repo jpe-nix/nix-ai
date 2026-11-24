@@ -90,6 +90,15 @@ in
       contracts.${tts}.timeoutSeconds == 300 && contracts.${tts}.pipeTimeoutSeconds == 600
       || throw "mlx shared residents: TTS must use the fixed 300 s request and 600 s pipe timeouts";
     assert
+      lib.all (agent: (agent.config.WorkingDirectory or null) != null) (
+        lib.attrValues (
+          lib.filterAttrs (
+            _: agent: lib.hasPrefix "dev.mlx-model-server" (agent.config.Label or "")
+          ) hm.config.launchd.agents
+        )
+      )
+      || throw "mlx shared residents: every resident agent needs a writable WorkingDirectory";
+    assert
       (routeFor "qwen3-asr-1.7b").model_info.mode == "audio_transcription"
       || throw "mlx shared residents: the ASR alias route must carry mode audio_transcription";
     assert
