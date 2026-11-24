@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.49.0](https://github.com/jpe-nix/nix-ai/compare/v8.48.2...v8.49.0) (2026-11-24)
+
+
+### Features
+
+* **openwhispr:** point AI scopes and transcription at the local router ([#3182](https://github.com/jpe-nix/nix-ai/issues/3182)) ([ab488bd](https://github.com/jpe-nix/nix-ai/commit/ab488bd498de316a8e166f29862bd1b1ebb47511))
+
 ## [8.48.2](https://github.com/jpe-nix/nix-ai/compare/v8.48.1...v8.48.2) (2026-11-24)
 
 
