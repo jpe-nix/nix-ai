@@ -164,10 +164,12 @@
   orca-skills = {
     input = "orca-skills";
     skills = [
+      "orca-cli"
       "orca-emulator"
       "orchestration"
     ];
     claude = [
+      "orca-cli"
       "orca-emulator"
       "orchestration"
     ];
