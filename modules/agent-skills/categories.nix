@@ -64,6 +64,7 @@ rec {
     "handoff"
     "native-first"
     # Third-party Orca skills required in every global session.
+    "orca-cli"
     "orca-emulator"
     "orchestration"
     "ponytail"
