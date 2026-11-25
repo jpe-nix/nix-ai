@@ -1,5 +1,40 @@
 # Changelog
 
+## [8.51.0](https://github.com/jpe-nix/nix-ai/compare/v8.50.2...v8.51.0) (2026-11-25)
+
+
+### Features
+
+* add ask-agent command and agent passthrough route ([#3195](https://github.com/jpe-nix/nix-ai/issues/3195)) ([e51e23c](https://github.com/jpe-nix/nix-ai/commit/e51e23cbfd4baf3f1f8885df755dcd5f14ca7b8b))
+
+
+### Bug Fixes
+
+* keep the recorder small role on small-no-thinking ([#3194](https://github.com/jpe-nix/nix-ai/issues/3194)) ([57d7ead](https://github.com/jpe-nix/nix-ai/commit/57d7ead680c5c81b24c1a4833fd124d91ad4c9ab))
+* keep the recorder's small role on small-no-thinking ([57d7ead](https://github.com/jpe-nix/nix-ai/commit/57d7ead680c5c81b24c1a4833fd124d91ad4c9ab))
+
+## [8.50.2](https://github.com/jpe-nix/nix-ai/compare/v8.50.1...v8.50.2) (2026-11-25)
+
+
+### Bug Fixes
+
+* restore the thinking route for the recorder small role ([#3191](https://github.com/jpe-nix/nix-ai/issues/3191)) ([4cfd01c](https://github.com/jpe-nix/nix-ai/commit/4cfd01c1634c347eed59681c122a684ffba2fb28))
+* restore the thinking route for the recorder's small role ([4cfd01c](https://github.com/jpe-nix/nix-ai/commit/4cfd01c1634c347eed59681c122a684ffba2fb28))
+
+## [8.50.1](https://github.com/jpe-nix/nix-ai/compare/v8.50.0...v8.50.1) (2026-11-24)
+
+
+### Bug Fixes
+
+* route the recorder small role through small-no-thinking ([#3188](https://github.com/jpe-nix/nix-ai/issues/3188)) ([14132e8](https://github.com/jpe-nix/nix-ai/commit/14132e8419eb4631f668207a4507081d038b0f32))
+
+## [8.50.0](https://github.com/jpe-nix/nix-ai/compare/v8.49.0...v8.50.0) (2026-11-24)
+
+
+### Features
+
+* share one resident slot pool across roles with instant router fallback ([#3185](https://github.com/jpe-nix/nix-ai/issues/3185)) ([1c1a79f](https://github.com/jpe-nix/nix-ai/commit/1c1a79fe87bff3fb4566b8a3f4cb23d1025da8ac))
+
 ## [8.49.0](https://github.com/jpe-nix/nix-ai/compare/v8.48.2...v8.49.0) (2026-11-24)
 
 

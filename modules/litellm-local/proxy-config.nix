@@ -20,6 +20,8 @@
   staticTier ? {
     routes = [ ];
     routerRungs = [ ];
+    routingGroups = [ ];
+    modelGroupAlias = { };
     fallbacks = [ ];
     contextWindowFallbacks = [ ];
   },
@@ -49,6 +51,18 @@ let
       # rejects as an unknown model.
       litellm_params.model = "anthropic/claude-*";
     }
+  ]
+  ++ lib.optional (aiStack.llmEndpoint == "router") {
+    model_name = "agent-*";
+    litellm_params = {
+      model = "openai/agent-*";
+      api_base = "os.environ/LLM_ROUTER_URL";
+      api_key = "os.environ/OPENAI_API_KEY";
+      num_retries = 0;
+      timeout = 1800;
+    };
+  }
+  ++ [
     {
       model_name = "*";
       litellm_params = {
@@ -84,6 +98,14 @@ in
       RateLimitErrorRetries = 0;
       TimeoutErrorRetries = 0;
     };
+  }
+  // lib.optionalAttrs (staticTier.routingGroups != [ ]) {
+    # Resident roles: each is a priority group over its worker's shared
+    # deployment and its own router rung (static-tier.nix).
+    routing_groups = staticTier.routingGroups;
+  }
+  // lib.optionalAttrs (staticTier.modelGroupAlias != { }) {
+    model_group_alias = staticTier.modelGroupAlias;
   }
   // lib.optionalAttrs hostServed {
     # Static resident aliases and host-served rungs are singleton or near-singleton

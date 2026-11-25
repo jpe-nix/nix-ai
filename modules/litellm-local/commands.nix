@@ -1,5 +1,5 @@
-# Executables the local proxy ships: the launchd entry point and the two
-# operator commands (`litellm-fallback-probe` and `litellm-alias-subset-check`).
+# Executables the local proxy ships: the launchd entry point and its operator
+# commands.
 #
 # Split out of ./default.nix to stay under the .file-size.yml ceiling. Grouped
 # by responsibility rather than by size — everything here produces something
@@ -51,6 +51,20 @@ let
     '';
   };
 
+  askAgent = pkgs.writeShellApplication {
+    name = "ask-agent";
+    runtimeInputs = [
+      pkgs.bash
+      pkgs.coreutils
+      pkgs.curl
+      pkgs.jq
+    ];
+    text = ''
+      LITELLM_LOCAL_URL=${lib.escapeShellArg (lib.removeSuffix "/v1" aiStack.localRouterUrl)} \
+        exec bash ${./../scripts/ask-agent.sh} "$@"
+    '';
+  };
+
   # CI-time / operator tool: proves the shared router actually serves every
   # alias in programs.litellmLocal.aliases. Not
   # gated on litellmLocal.enable — it tests the upstream router directly, and
@@ -93,8 +107,12 @@ let
 in
 {
   inherit
-    fallbackProbe
     aliasSubsetCheck
     proxyScript
     ;
+  # Installed whenever the local proxy is enabled.
+  enabledPackages = [
+    fallbackProbe
+    askAgent
+  ];
 }
