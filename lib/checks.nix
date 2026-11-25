@@ -350,6 +350,14 @@ in
 // (import ./checks/openwhispr-router.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/litellm-local-background-health-checks.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/litellm-local-scripts.nix { inherit pkgs src; })
+// (import ./checks/ask-agent.nix {
+  inherit
+    pkgs
+    src
+    hmConfig
+    hmConfigLitellmLocal
+    ;
+})
 // (import ./checks/litellm-local-aliases.nix { inherit pkgs hmConfig homelab-contracts; })
 // (import ./checks/fabric.nix {
   inherit
