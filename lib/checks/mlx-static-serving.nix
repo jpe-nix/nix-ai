@@ -187,7 +187,8 @@ in
       && limits.clients.ghGuard.timeoutSeconds == qwen.timeoutSeconds
       && limits.clients.recorder.identity == "recorder"
       && limits.clients.recorder.models.medium == "medium"
-      && limits.clients.recorder.models.small == "small"
+      && limits.clients.recorder.models.small == "small-no-thinking"
+      && limits.aliases.small-no-thinking == small9b.model
       &&
         limits.clients.recorder.requestTimeoutSeconds == builtins.foldl' lib.max 0 (
           map (model: limits.models.${model}.timeoutSeconds) [
