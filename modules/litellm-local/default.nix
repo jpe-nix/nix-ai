@@ -185,8 +185,6 @@ let
       ;
   };
   inherit (commands)
-    fallbackProbe
-    askAgent
     aliasSubsetCheck
     proxyScript
     ;
@@ -232,10 +230,7 @@ in
       ++ fallbackTier.assertions
       ++ isolatedTier.assertions;
 
-      home.packages = [
-        fallbackProbe
-        askAgent
-      ];
+      home.packages = commands.enabledPackages;
 
       launchd.agents = import ./launchd.nix {
         inherit

@@ -107,9 +107,12 @@ let
 in
 {
   inherit
-    fallbackProbe
-    askAgent
     aliasSubsetCheck
     proxyScript
     ;
+  # Installed whenever the local proxy is enabled.
+  enabledPackages = [
+    fallbackProbe
+    askAgent
+  ];
 }
