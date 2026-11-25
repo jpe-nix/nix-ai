@@ -93,9 +93,9 @@
 # Everything the proxy needs from Claude Code lives HERE, and nowhere else.
 # settings.json is the one channel that reaches every session — a login shell,
 # the desktop app, an IDE extension, and a session already running when the
-# rebuild lands. Splitting the wiring across settings.json and shell init is
-# what caused the 2026-08-24 outage: the base URL reached every session while
-# the header reached only new login shells, so every other session failed.
+# rebuild lands. Splitting the wiring across settings.json and shell init does
+# not work: the base URL reaches every session while the header reaches only
+# new login shells, so every other session fails.
 # Nothing here is secret (the header is a constant marker; see the litellm-local
 # module header for why the proxy takes no credential), so nothing here needs
 # to stay out of the Nix store.

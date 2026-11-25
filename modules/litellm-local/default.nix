@@ -29,8 +29,8 @@
 #   desktop app, an IDE extension — and only `settings.json` reaches all of
 #   them. `settings.json` is rendered into the Nix store, so nothing secret can
 #   go through it. A proxy key therefore cannot reach every session, and a key
-#   that reaches only some sessions breaks the rest (the 2026-08-24 outage:
-#   every session without the key got `400 No connected db`).
+#   that reaches only some sessions breaks the rest (every session without
+#   the key gets `400 No connected db`).
 # - The listener is loopback-only and the bearer it holds is already readable
 #   by every process of the same user (`llmEndpointTokenFile` is that user's
 #   file), so a key would not have guarded anything a local process could not

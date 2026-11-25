@@ -5,8 +5,8 @@
 # model_group_settings list must be the only forwarding rule. A global
 # `general_settings.forward_client_headers_to_llm_api` boolean would reach it too.
 #
-# Per the 2026-08-24 outage, everything a Claude Code session needs must travel
-# in settings.json, so it must be non-secret: the proxy takes no credential, and
+# Everything a Claude Code session needs must travel in settings.json, because
+# shell init reaches only new login shells. So it must be non-secret: the proxy takes no credential, and
 # the one header LiteLLM needs is a constant marker.
 #
 # Reads programs.litellmLocal.renderedConfig, so it needs no second HM evaluation.
@@ -88,7 +88,7 @@ let
 
   # Under `claudeDirect` the proxy is out of Claude Code's path, so both the
   # base URL and the marker header are absent by design. The pair must move
-  # together: a URL without the header is the 2026-08-24 outage, and a header
+  # together: a URL without the header fails every session, and a header
   # without the URL points at nothing.
   inherit (enabled.programs.litellmLocal) claudeDirect;
   claudeHasBaseUrl = claudeEnv ? ANTHROPIC_BASE_URL;
