@@ -8,8 +8,7 @@ let
   inherit (pkgs) lib;
   helpers = import ./helpers.nix { inherit pkgs; };
   inherit (hmConfigStaticServing.config.programs.litellmLocal) renderedConfig;
-  routes = renderedConfig.model_list;
-  routeFor = name: builtins.head (builtins.filter (route: route.model_name == name) routes);
+  routeFor = helpers.routeFor renderedConfig;
   fallbackFor =
     group: lib.findFirst (entry: entry ? ${group}) null renderedConfig.litellm_settings.fallbacks;
   contracts = hmConfigStaticServing.config.programs.mlx.staticResidentContracts;

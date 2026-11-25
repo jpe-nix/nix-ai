@@ -170,7 +170,11 @@ in
   inherit pkgs hmConfig;
   instructions = catalogInstructions;
 })
+// (import ./checks/agent-skills-sre.nix {
+  inherit pkgs hmConfig;
+})
 // (import ./checks/codex.nix { inherit pkgs hmConfig; })
+// (import ./checks/codex-model-policy.nix { inherit pkgs hmConfig; })
 // (import ./checks/claude-router-launchers.nix { inherit pkgs; })
 // (import ./checks/fast-delegation.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/codex-approvals.nix { inherit pkgs hmConfig mkHmConfig; })
@@ -209,6 +213,9 @@ in
 })
 // (import ./checks/herdr-hail-dedupe.nix {
   inherit pkgs;
+})
+// (import ./checks/plan-skill-gate.nix {
+  inherit pkgs hmConfig;
 })
 // (import ./checks/qwen-code.nix {
   inherit
@@ -286,6 +293,8 @@ in
 // (import ./checks/mlx-static-fallback.nix { inherit pkgs hmConfigStaticServing; })
 // (import ./checks/mlx-catalog-vlm.nix { inherit pkgs src hmConfigCatalog; })
 // (import ./checks/mlx-mtp-reachable.nix { inherit pkgs mkHmConfig; })
+// (import ./checks/mlx-audio-command.nix { inherit pkgs hmConfigCatalog mkHmConfig; })
+// (import ./checks/mlx-shared-residents.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/mlx-model-extra-args.nix { inherit pkgs; })
 // (import ./checks/mlx-catalog.nix { inherit pkgs hmConfigCatalog; })
 // (import ./checks/local-context-cap.nix { inherit pkgs hmConfigCatalog; })
@@ -322,6 +331,7 @@ in
     hmConfigLitellmLocal
     ;
 })
+// (import ./checks/claude-operating-settings.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/litellm-local-endpoint.nix { inherit pkgs hmConfigLitellmLocal; })
 // (import ./checks/litellm-local-subagents.nix { inherit pkgs hmConfigLitellmSubagents; })
 // (import ./checks/local-router-url.nix {
@@ -337,7 +347,17 @@ in
 // (import ./checks/litellm-local-negative.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/litellm-local-isolated-chains.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/litellm-local-launch-prefix.nix { inherit pkgs mkHmConfig; })
+// (import ./checks/openwhispr-router.nix { inherit pkgs mkHmConfig; })
+// (import ./checks/litellm-local-background-health-checks.nix { inherit pkgs mkHmConfig; })
 // (import ./checks/litellm-local-scripts.nix { inherit pkgs src; })
+// (import ./checks/ask-agent.nix {
+  inherit
+    pkgs
+    src
+    hmConfig
+    hmConfigLitellmLocal
+    ;
+})
 // (import ./checks/litellm-local-aliases.nix { inherit pkgs hmConfig homelab-contracts; })
 // (import ./checks/fabric.nix {
   inherit

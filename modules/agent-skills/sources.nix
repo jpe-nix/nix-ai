@@ -164,10 +164,12 @@
   orca-skills = {
     input = "orca-skills";
     skills = [
+      "orca-cli"
       "orca-emulator"
       "orchestration"
     ];
     claude = [
+      "orca-cli"
       "orca-emulator"
       "orchestration"
     ];
@@ -175,6 +177,19 @@
   ponytail = {
     input = "ponytail";
     skills = "all";
+    claude = [ ];
+  };
+  sre-skills = {
+    input = "sre-skills";
+    skills = [
+      "anomaly-detection"
+      "data-ingestion"
+      "generic-mitigations"
+      "monitoring-graphs"
+      "postmortem-aggregator"
+      "postmortem-generator"
+      "pre-publish-checker"
+    ];
     claude = [ ];
   };
   superpowers-marketplace = {

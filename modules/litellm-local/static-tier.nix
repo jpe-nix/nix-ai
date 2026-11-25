@@ -8,13 +8,16 @@
 # Each router rung is its own group (`<role>-homelab`) because a fallback
 # target must be a named group; the `*` wildcard cannot be one.
 #
-# Each resident route admits as many requests as its worker decodes at once
-# (the contract's `concurrency`); a request beyond that is refused immediately.
+# Each resident worker is one deployment (`<catalog key>-resident`) that admits
+# as many requests as the worker decodes at once (the contract's `concurrency`).
+# Its roles are priority routing groups over that deployment and their own
+# router rung, so they share the worker's slots: when every slot is busy, a
+# request moves to the router rung at once instead of queueing on the worker.
 #
 # A thinking-off sibling (`<role>-no-thinking`) of a role in `noThinkingRoles`
-# is that role's route with `extra_body` set per request. It shares the same
-# worker, so it inherits the same limits, and its own router rung carries the
-# same body. Every other route keeps the worker's thinking default.
+# routes to a sibling deployment with `extra_body` set per request. It uses the
+# same worker and limits, and its own router rung carries the same body. Every
+# other route keeps the worker's thinking default.
 {
   lib,
   staticResidentModels,
@@ -51,13 +54,28 @@ let
     };
   };
 
-  residentRoutes = lib.concatMap (
+  # One deployment per resident worker. Every role on that worker is a routing
+  # group that points at it, so the deployment's max_parallel_requests counts
+  # the worker's in-flight requests across all of its roles.
+  residentName = modelId: "${staticResidentModels.${modelId}.catalogKey}-resident";
+  routedRolesOf =
+    modelId:
+    builtins.filter (role: !(localModelDefinesRole role)) (
+      builtins.attrNames staticResidentModels.${modelId}.roles
+    );
+  routedResidents = builtins.filter (modelId: routedRolesOf modelId != [ ]) (
+    builtins.attrNames staticResidentModels
+  );
+  noThinkingRolesOf =
+    modelId: builtins.filter (role: builtins.elem role noThinkingRoles) (routedRolesOf modelId);
+
+  residentRoute =
     modelId:
     let
       contract = staticResidentModels.${modelId};
     in
-    map (role: {
-      model_name = role;
+    {
+      model_name = residentName modelId;
       litellm_params = {
         model = "openai/${modelId}";
         api_base = "http://127.0.0.1:${toString contract.servicePort}/v1";
@@ -69,23 +87,68 @@ let
       model_info = {
         max_input_tokens = contract.maxInputTokens;
         max_output_tokens = contract.maxOutputTokens;
+      }
+      // lib.optionalAttrs (contract.mode != null) { inherit (contract) mode; };
+    };
+  # The thinking-off sibling needs its own deployment for `extra_body`, so it
+  # keeps its own in-flight count.
+  noThinkingRoute =
+    modelId:
+    let
+      route = residentRoute modelId;
+    in
+    route
+    // {
+      model_name = noThinkingName route.model_name;
+      litellm_params = route.litellm_params // {
+        extra_body = noThinkingBody;
       };
-    }) (builtins.filter (role: !(localModelDefinesRole role)) (builtins.attrNames contract.roles))
-  ) (builtins.attrNames staticResidentModels);
+    };
+
+  # A priority group tries the resident first. When the resident is already at
+  # max_parallel_requests, LiteLLM refuses it with a 429 at once and the group
+  # moves to the role's router rung in the same request.
+  # LiteLLM reserves some group names ("default" is its implicit group). Such a
+  # role gets a suffixed group, and a model_group_alias keeps its own name callable.
+  reservedGroupNames = [ "default" ];
+  groupName = role: if builtins.elem role reservedGroupNames then "${role}-role" else role;
+  priorityGroup = role: deployment: {
+    group_name = groupName role;
+    models = [
+      deployment
+      (routerRung role)
+    ];
+    routing_strategy = "priority";
+    model_priorities = {
+      ${deployment} = 1;
+      ${routerRung role} = 2;
+    };
+  };
 in
 {
   routes =
-    residentRoutes
-    ++ map (
-      route:
-      route
-      // {
-        model_name = noThinkingName route.model_name;
-        litellm_params = route.litellm_params // {
-          extra_body = noThinkingBody;
-        };
-      }
-    ) (builtins.filter (route: builtins.elem route.model_name noThinkingRoles) residentRoutes);
+    map residentRoute routedResidents
+    ++ map noThinkingRoute (
+      builtins.filter (modelId: noThinkingRolesOf modelId != [ ]) routedResidents
+    );
+
+  modelGroupAlias = lib.listToAttrs (
+    map (role: lib.nameValuePair role (groupName role)) (
+      builtins.filter (role: groupName role != role) (
+        lib.concatMap (
+          modelId: routedRolesOf modelId ++ map noThinkingName (noThinkingRolesOf modelId)
+        ) routedResidents
+      )
+    )
+  );
+
+  routingGroups = lib.concatMap (
+    modelId:
+    map (role: priorityGroup role (residentName modelId)) (routedRolesOf modelId)
+    ++ map (role: priorityGroup (noThinkingName role) (noThinkingName (residentName modelId))) (
+      noThinkingRolesOf modelId
+    )
+  ) routedResidents;
 
   routerRungs =
     map (role: {

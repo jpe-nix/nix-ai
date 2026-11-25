@@ -1,4 +1,4 @@
-# Up to three always-loaded MLX resident servers. The catalog owns every model limit,
+# Up to four always-loaded MLX resident servers. The catalog owns every model limit,
 # the generated consumer file and the launch arguments are compiled from it.
 {
   config,
@@ -28,12 +28,16 @@ let
   byRole = lib.foldl' (
     acc: modelId: acc // lib.genAttrs (builtins.attrNames contracts.${modelId}.roles) (_: modelId)
   ) { } (builtins.attrNames contracts);
-  judgeModelId = byRole.judge or null;
-  judgeContract = if judgeModelId == null then { } else contracts.${judgeModelId};
+  # The publish gate uses the strongest resident; the judge role is its fallback.
+  ghGuardModelId = byRole.default or byRole.judge or null;
+  ghGuardContract = if ghGuardModelId == null then { } else contracts.${ghGuardModelId};
   routerUrl = config.services.aiStack.localRouterUrl;
+  # Screenpipe pipes run as tool-using agents. With thinking on, the small
+  # resident spends the turn after a tool result reasoning until it hits its
+  # output limit, so the recorder's small role uses the no-thinking route.
   recorderModels = {
     medium = "medium";
-    small = "small";
+    small = "small-no-thinking";
   };
   recorderSourceRoles = {
     medium = byRole.default;
@@ -56,12 +60,12 @@ let
         aliases = builtins.attrNames contract.roles;
       }
     ) contracts;
-    aliases = byRole // recorderSourceRoles;
+    aliases = byRole // recorderSourceRoles // { small-no-thinking = byRole.fast; };
     clients = {
-      ghGuard = lib.optionalAttrs (judgeModelId != null) {
-        url = "${consumerConfig.models.${judgeModelId}.baseUrl}/chat/completions";
-        model = judgeModelId;
-        inherit (judgeContract) timeoutSeconds;
+      ghGuard = lib.optionalAttrs (ghGuardModelId != null) {
+        url = "${consumerConfig.models.${ghGuardModelId}.baseUrl}/chat/completions";
+        model = ghGuardModelId;
+        inherit (ghGuardContract) timeoutSeconds;
       };
       recorder = {
         baseUrl = routerUrl;
@@ -117,6 +121,8 @@ let
           ProcessType = cfg.processType;
           AbandonProcessGroup = false;
           EnvironmentVariables = env;
+          # launchd starts in read-only /; servers that write relative paths (mlx_audio's logs/) need a writable cwd.
+          WorkingDirectory = logDir;
           StandardOutPath = "${logDir}/${key}.log";
           StandardErrorPath = "${logDir}/${key}.error.log";
         };
@@ -128,8 +134,8 @@ in
   config = lib.mkIf (cfg.enable && contracts != { }) {
     assertions = [
       {
-        assertion = builtins.length (builtins.attrNames contracts) <= 3;
-        message = "programs.mlx may render at most three static resident model servers.";
+        assertion = builtins.length (builtins.attrNames contracts) <= 4;
+        message = "programs.mlx may render at most four static resident model servers.";
       }
       {
         # Resident weights are wired GPU memory. A standalone limit of 0 means

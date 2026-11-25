@@ -1,5 +1,5 @@
-# Executables the local proxy ships: the launchd entry point and the two
-# operator commands.
+# Executables the local proxy ships: the launchd entry point and its operator
+# commands.
 #
 # Split out of ./default.nix to stay under the .file-size.yml ceiling. Grouped
 # by responsibility rather than by size — everything here produces something
@@ -51,20 +51,17 @@ let
     '';
   };
 
-  # The probe, on a schedule, paging when a rung stops answering. The probe
-  # itself was already "the only check that settles it" (fallback-tier.nix) and
-  # nothing ran it, so a converged host could carry a correct config and a rung
-  # that 404s every request with the machine having no opinion about it.
-  fallbackWatch = pkgs.writeShellApplication {
-    name = "litellm-fallback-watch";
+  askAgent = pkgs.writeShellApplication {
+    name = "ask-agent";
     runtimeInputs = [
-      pkgs.curl
-      pkgs.python3
+      pkgs.bash
       pkgs.coreutils
+      pkgs.curl
+      pkgs.jq
     ];
     text = ''
-      LITELLM_PROBE_BIN=${fallbackProbe}/bin/litellm-fallback-probe \
-        exec ${./../scripts/litellm-fallback-watch.sh} "$@"
+      LITELLM_LOCAL_URL=${lib.escapeShellArg (lib.removeSuffix "/v1" aiStack.localRouterUrl)} \
+        exec bash ${./../scripts/ask-agent.sh} "$@"
     '';
   };
 
@@ -110,9 +107,12 @@ let
 in
 {
   inherit
-    fallbackProbe
-    fallbackWatch
     aliasSubsetCheck
     proxyScript
     ;
+  # Installed whenever the local proxy is enabled.
+  enabledPackages = [
+    fallbackProbe
+    askAgent
+  ];
 }
