@@ -32,8 +32,7 @@ let
   ];
   askAgentChecks = import (src + "/lib/checks/ask-agent.nix") {
     inherit pkgs src;
-    hmConfig = fixtures.hmConfig;
-    hmConfigLitellmLocal = fixtures.hmConfigLitellmLocal;
+    inherit (fixtures) hmConfig hmConfigLitellmLocal;
   };
 in
 {

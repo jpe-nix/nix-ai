@@ -61,7 +61,7 @@ let
     ];
     text = ''
       LITELLM_LOCAL_URL=${lib.escapeShellArg (lib.removeSuffix "/v1" aiStack.localRouterUrl)} \
-        exec ${./../scripts/ask-agent.sh} "$@"
+        exec bash ${./../scripts/ask-agent.sh} "$@"
     '';
   };
 
