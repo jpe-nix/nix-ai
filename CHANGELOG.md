@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.52.0](https://github.com/jpe-nix/nix-ai/compare/v8.51.0...v8.52.0) (2026-11-25)
+
+
+### Features
+
+* **agent-skills:** include the Orca CLI skill ([#3200](https://github.com/jpe-nix/nix-ai/issues/3200)) ([eb6b446](https://github.com/jpe-nix/nix-ai/commit/eb6b4464645297ba8653568e6af806d36dff2ca4))
+
 ## [8.51.0](https://github.com/jpe-nix/nix-ai/compare/v8.50.2...v8.51.0) (2026-11-25)
 
 
