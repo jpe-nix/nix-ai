@@ -30,10 +30,16 @@ let
       };
     }
   ];
+  askAgentChecks = import (src + "/lib/checks/ask-agent.nix") {
+    inherit pkgs src;
+    hmConfig = fixtures.hmConfig;
+    hmConfigLitellmLocal = fixtures.hmConfigLitellmLocal;
+  };
 in
 {
   ${system} =
-    (import (src + "/lib/checks/opencode.nix") { inherit pkgs hmConfig; })
+    askAgentChecks
+    // (import (src + "/lib/checks/opencode.nix") { inherit pkgs hmConfig; })
     // (import (src + "/lib/checks/codex-approvals.nix") {
       inherit pkgs;
       inherit (fixtures) hmConfig mkHmConfig;
