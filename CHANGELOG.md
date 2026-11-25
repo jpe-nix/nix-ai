@@ -1,5 +1,18 @@
 # Changelog
 
+## [8.51.0](https://github.com/jpe-nix/nix-ai/compare/v8.50.2...v8.51.0) (2026-11-25)
+
+
+### Features
+
+* add ask-agent command and agent passthrough route ([#3195](https://github.com/jpe-nix/nix-ai/issues/3195)) ([e51e23c](https://github.com/jpe-nix/nix-ai/commit/e51e23cbfd4baf3f1f8885df755dcd5f14ca7b8b))
+
+
+### Bug Fixes
+
+* keep the recorder small role on small-no-thinking ([#3194](https://github.com/jpe-nix/nix-ai/issues/3194)) ([57d7ead](https://github.com/jpe-nix/nix-ai/commit/57d7ead680c5c81b24c1a4833fd124d91ad4c9ab))
+* keep the recorder's small role on small-no-thinking ([57d7ead](https://github.com/jpe-nix/nix-ai/commit/57d7ead680c5c81b24c1a4833fd124d91ad4c9ab))
+
 ## [8.50.2](https://github.com/jpe-nix/nix-ai/compare/v8.50.1...v8.50.2) (2026-11-25)
 
 
