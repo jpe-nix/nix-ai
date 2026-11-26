@@ -19,6 +19,7 @@
 #   - huggingface-skills (huggingface/skills, 10371★)       — HF Hub ops
 #   - karpathy-skills (forrestchang/andrej-karpathy-skills, 113639★) — behavioral guidelines
 #   - ponytail (DietrichGebert/ponytail) — minimalism / YAGNI behavioral mode
+#   - trailofbits (trailofbits/skills) — capped /goal drafting (goal-prompt only)
 #   - obsidian-skills (kepano/obsidian-skills, 28277★)
 #   - axton-obsidian-visual-skills (axtonliu/..., 2651★)
 #   - visual-explainer-marketplace (nicobailon/..., 7816★)
@@ -112,6 +113,14 @@ _:
     # skills (ponytail, ponytail-review, ponytail-help) also flow to
     # ~/.agents/skills/ via agent-skills auto-discovery (Gemini/Codex).
     "ponytail@ponytail" = true;
+
+    # ========================================================================
+    # trailofbits — trailofbits/skills (goal-prompt only)
+    # ========================================================================
+    # Single plugin: goal-prompt. Drafts one /goal line under the 4,000-character
+    # cap. Used by ai-cli-harness-better-practices:goal. Its skill also flows to
+    # ~/.agents/skills/ through the agent-skills source table.
+    "goal-prompt@trailofbits" = true;
 
     # ========================================================================
     # obsidian-skills + axton-obsidian-visual-skills + visual-explainer

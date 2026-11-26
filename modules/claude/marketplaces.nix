@@ -166,6 +166,15 @@ let
       };
       flakeInput = marketplaceInputs.autoresearch;
     };
+    # trailofbits lives in nix-ai (input + tier entry). Ships a native
+    # .claude-plugin/marketplace.json; only the `goal-prompt` plugin is enabled.
+    "trailofbits" = {
+      source = {
+        type = "github";
+        url = "trailofbits/skills";
+      };
+      flakeInput = marketplaceInputs.trailofbits-skills;
+    };
     # context-engineering-kit lives in nix-ai (input + tier entry). Ships a
     # native .claude-plugin/marketplace.json; only the `kaizen` plugin is
     # enabled, and it carries both the `kaizen` and `why` skills.
