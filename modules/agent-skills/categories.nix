@@ -51,6 +51,7 @@ rec {
     "delegate-to-ai"
     "frontend-design"
     "goal"
+    "goal-prompt"
     # Delegation mechanics are universal: every repository's session has bulk
     # reads to hand off, and a skill only this session can reach is a skill
     # nothing delegates through.
