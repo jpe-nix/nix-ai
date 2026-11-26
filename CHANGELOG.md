@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.52.1](https://github.com/jpe-nix/nix-ai/compare/v8.52.0...v8.52.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* **checks:** drop the frozen merge-base goldens from the default-off facade canary ([#3204](https://github.com/jpe-nix/nix-ai/issues/3204)) ([a90d52b](https://github.com/jpe-nix/nix-ai/commit/a90d52bef9e0e5e7d0117acc2993bb124fc3288e))
+
 ## [8.52.0](https://github.com/jpe-nix/nix-ai/compare/v8.51.0...v8.52.0) (2026-11-25)
 
 
