@@ -18,7 +18,7 @@
 #           tests/test-rank-start-guards.sh) so the 10x1s graceful window and
 #           the 2s post-SIGKILL settle run instantly instead of ~12s real time.
 #
-# Replays the 2026-07-26 incident directly: a 94-minute-old orphan holding the
+# Replays this failure directly: a long-lived orphan holding the
 # worker port survived a proxy restart because the OLD reap matched processes
 # by MLX_MODEL_SERVER_PROCESS_PATTERN, and that pattern never matched the
 # in-process mlx-lm-launch.py worker shape (see llama-swap-reap.sh's header
