@@ -13,12 +13,19 @@
 #   - claude-skills (secondsky/claude-skills, 129★)         — single-skill specialty plugins
 #   - autoresearch (uditgoenka/autoresearch, 5300★)         — autonomous iteration engine
 #   - claude-community (anthropics/claude-plugins-community) — Anthropic's community catalog
+#   - agentops-marketplace (boshu2/agentops, 457★)           — planning, orchestration, review, docs
 
 _:
 
 {
   enabledPlugins = {
     "mattpocock-skills@mattpocock" = true;
+
+    # agentops — boshu2/agentops (457★). Enabled globally: Claude Code cannot
+    # hide one plugin skill, and the skills link to each other by relative
+    # path, so the plugin loads whole. Its skills are namespaced
+    # (/agentops:plan), so none replaces the built-in /plan, /memory or /review.
+    "agentops@agentops-marketplace" = true;
 
     # ========================================================================
     # autoresearch — uditgoenka/autoresearch (5300★)
