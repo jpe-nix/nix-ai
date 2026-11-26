@@ -1,5 +1,13 @@
 # Changelog
 
+## [8.53.0](https://github.com/jpe-nix/nix-ai/compare/v8.52.1...v8.53.0) (2026-11-26)
+
+
+### Features
+
+* **agent-skills:** add agentops skills to every harness ([#3050](https://github.com/jpe-nix/nix-ai/issues/3050)) ([ecfcf4e](https://github.com/jpe-nix/nix-ai/commit/ecfcf4ee0b2ab96395b19bc7a1da435aaec17867))
+* **claude:** enable trailofbits goal-prompt for capped /goal lines ([#3208](https://github.com/jpe-nix/nix-ai/issues/3208)) ([df2936b](https://github.com/jpe-nix/nix-ai/commit/df2936b6acf9a7d5e2f56f71533f0015af6c38cb))
+
 ## [8.52.1](https://github.com/jpe-nix/nix-ai/compare/v8.52.0...v8.52.1) (2026-11-26)
 
 
