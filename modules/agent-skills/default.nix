@@ -24,11 +24,14 @@ let
   selectedSources = lib.filterAttrs (_: source: builtins.isList source.skills) sources;
   discoveredInputs = builtins.removeAttrs marketplaceInputs (builtins.attrNames selectedSources);
 
-  # A selected skill lives at <input>/skills/<name>/SKILL.md, or at
-  # <input>/<name>/SKILL.md when the source ships a single skill at its root.
+  # A selected skill lives at <input>/skills/<name>/SKILL.md, at
+  # <input>/<name>/SKILL.md when the source ships a single skill at its root,
+  # or at <input>/plugins/<name>/skills/<name>/SKILL.md when a plugin
+  # marketplace nests a same-named single-skill plugin under plugins/.
   skillFileCandidates = sourceName: skillName: [
     "${skillSourceRoots.${sourceName}}/skills/${skillName}/SKILL.md"
     "${skillSourceRoots.${sourceName}}/${skillName}/SKILL.md"
+    "${skillSourceRoots.${sourceName}}/plugins/${skillName}/skills/${skillName}/SKILL.md"
   ];
   matchingSkillFiles =
     sourceName: skillName:

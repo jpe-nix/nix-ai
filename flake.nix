@@ -250,6 +250,13 @@
       flake = false;
     };
 
+    # Trail of Bits skills marketplace. Only its goal-prompt plugin is enabled:
+    # it drafts one /goal line under the 4,000-character cap. Dual-channel.
+    trailofbits-skills = {
+      url = "github:trailofbits/skills";
+      flake = false;
+    };
+
     # Multi-source social research, ranked by engagement. Cross-tool only.
     last30days-skill = {
       url = "github:mvanhorn/last30days-skill";

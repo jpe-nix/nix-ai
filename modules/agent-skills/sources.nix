@@ -207,6 +207,11 @@
     skills = "all";
     claude = [ ];
   };
+  trailofbits-skills = {
+    input = "trailofbits-skills";
+    skills = [ "goal-prompt" ];
+    claude = [ ];
+  };
   vct-cribl-pack-validator-skills = {
     input = "vct-cribl-pack-validator-skills";
     skills = "all";
