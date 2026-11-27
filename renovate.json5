@@ -20,6 +20,16 @@
         '# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+) packageName=(?<packageName>\\S+) currentValue=(?<currentValue>\\S+) extractVersion=(?<extractVersion>\\S+)\\n\\s*mlxLmPrInstallSpec = "mlx-lm @ git\\+https://github\\.com/jundot/mlx-lm\\.git@(?<currentDigest>[a-f0-9]{40})";',
       ],
     },
+    {
+      // The hash-fix workflow runs nix-update from a commit-pinned flake reference
+      // with its release tag in a trailing comment; both move together.
+      "customType": "regex",
+      "managerFilePatterns": ["/^\\.github\\/workflows\\/fix-renovate-hashes\\.yml$/"],
+      "matchStrings": [
+        'nix run github:(?<depName>Mic92\\/nix-update)\\/(?<currentDigest>[0-9a-f]{40})#nix-update .* # (?<currentValue>v\\S+)',
+      ],
+      "datasourceTemplate": "github-tags",
+    },
   ],
   "packageRules": [
     {
