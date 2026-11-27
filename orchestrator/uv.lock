@@ -4,13 +4,10 @@ requires-python = ">=3.14"
 
 [options]
 exclude-newer = "0001-01-01T00:00:00Z" # This has no effect and is included for backwards compatibility when using relative exclude-newer values.
-exclude-newer-span = "P7D"
+exclude-newer-span = "P3D"
 
 [options.exclude-newer-package]
-certifi = { timestamp = "0001-01-01T00:00:00Z", span = "P3D" }
-filelock = { timestamp = "0001-01-01T00:00:00Z", span = "P4D" }
 nltk = { timestamp = "0001-01-01T00:00:00Z", span = "P2D" }
-setuptools = { timestamp = "0001-01-01T00:00:00Z", span = "P4D" }
 
 [manifest]
 constraints = [
