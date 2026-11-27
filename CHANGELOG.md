@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.54.1](https://github.com/jpe-nix/nix-ai/compare/v8.54.0...v8.54.1) (2026-11-27)
+
+
+### Bug Fixes
+
+* **litellm-local:** route resident aliases through custom_openai chat completions ([#3212](https://github.com/jpe-nix/nix-ai/issues/3212)) ([eec0cd8](https://github.com/jpe-nix/nix-ai/commit/eec0cd84bc4f3eb3f08e36a7cfc9d23e2e5007a1))
+
 ## [8.54.0](https://github.com/jpe-nix/nix-ai/compare/v8.53.0...v8.54.0) (2026-11-27)
 
 

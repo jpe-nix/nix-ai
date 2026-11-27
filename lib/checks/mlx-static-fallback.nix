@@ -48,7 +48,8 @@ in
 {
   mlx-static-resident-router-fallback =
     if
-      small.litellm_params.model == "openai/${small9b.model}"
+      small.litellm_params.model == "custom_openai/${small9b.model}"
+      && small.litellm_params.use_chat_completions_api
       && small.litellm_params.api_base == "http://127.0.0.1:${toString small9b.servicePort}/v1"
       && (fallbackFor "small").small == [ "small-homelab" ]
       && (windowFallbackFor "small").small == [ "small-homelab" ]
