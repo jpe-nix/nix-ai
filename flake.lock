@@ -731,6 +731,22 @@
         "type": "github"
       }
     },
+    "flock-check": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785129672,
+        "narHash": "sha256-XjhrRUJzTQuM+PdE/uKMjriRmHrozeo4rPDAC0ijfZ4=",
+        "owner": "tonbistudio",
+        "repo": "flock-check",
+        "rev": "508062df559a4eafb8257cef48c3812b8bc5e5ba",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tonbistudio",
+        "repo": "flock-check",
+        "type": "github"
+      }
+    },
     "gemini-cli": {
       "flake": false,
       "locked": {
@@ -1654,6 +1670,7 @@
         "drawio-skill": "drawio-skill",
         "fabric-src": "fabric-src",
         "find-skills-src": "find-skills-src",
+        "flock-check": "flock-check",
         "gh-stack": "gh-stack",
         "herdr-hail-src": "herdr-hail-src",
         "herdr-remote-src": "herdr-remote-src",
