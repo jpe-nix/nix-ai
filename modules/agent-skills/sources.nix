@@ -103,6 +103,11 @@
     skills = "all";
     claude = [ ];
   };
+  flock-check = {
+    input = "flock-check";
+    skills = [ "flock-check" ];
+    claude = [ ];
+  };
   gh-stack = {
     input = "gh-stack";
     skills = "all";

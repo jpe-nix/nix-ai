@@ -32,6 +32,8 @@ let
     "${skillSourceRoots.${sourceName}}/skills/${skillName}/SKILL.md"
     "${skillSourceRoots.${sourceName}}/${skillName}/SKILL.md"
     "${skillSourceRoots.${sourceName}}/plugins/${skillName}/skills/${skillName}/SKILL.md"
+    # A single-skill repository keeps its SKILL.md at the root.
+    "${skillSourceRoots.${sourceName}}/SKILL.md"
   ];
   matchingSkillFiles =
     sourceName: skillName:
