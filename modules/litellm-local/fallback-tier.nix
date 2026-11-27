@@ -152,6 +152,23 @@ let
     };
   };
 
+  # Direct router groups, outside the chain and outside `names`, so they
+  # appear in no fallbacks and no context_window_fallbacks list. The name
+  # follows the terminal rung's `<role>-homelab` convention: this proxy's
+  # group for the shared router's `sensitivity` role, on the same router leg.
+  # No fallback on purpose: a caller classifying content needs the upstream's
+  # verdict or its failure, never a different model's answer.
+  directGroups = [
+    {
+      model_name = "sensitivity-homelab";
+      litellm_params = {
+        model = "openai/sensitivity";
+        api_base = "os.environ/LLM_ROUTER_URL";
+        api_key = "os.environ/OPENAI_API_KEY";
+      };
+    }
+  ];
+
   names = (map (m: m.name) localModels) ++ [ effectiveTerminalName ];
 
   # Providers that must never be named on this host, because the shared router
@@ -184,7 +201,7 @@ rec {
   headEntry = builtins.head modelList0;
   modelList0 = localList ++ [ terminal ];
   aliasEntries = map (a: headEntry // { model_name = a; }) headAliases;
-  modelList = modelList0 ++ aliasEntries;
+  modelList = modelList0 ++ aliasEntries ++ directGroups;
 
   inherit
     names
