@@ -272,6 +272,7 @@ in
     ];
     _module.args = partialArgs {
       inherit
+        ai-llm-prompts
         nix-claude-code
         marketplaceInputs
         skillSourceRoots
