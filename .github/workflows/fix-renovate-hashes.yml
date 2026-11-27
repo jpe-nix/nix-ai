@@ -47,16 +47,16 @@ jobs:
         uses: DeterminateSystems/determinate-nix-action@92957199488000b908fdad19f63711000965d8f3 # v3.24.1
 
       - name: Update mcp hash
-        run: nix run nixpkgs#nix-update -- --flake mcp --version=skip
+        run: nix run github:Mic92/nix-update/cfd5a600f21407748daa7b38cd5e370d868ce10e#nix-update -- --flake mcp --version=skip  # v1.17.0
 
       - name: Update cecli hash
-        run: nix run nixpkgs#nix-update -- --flake cecli --version=skip
+        run: nix run github:Mic92/nix-update/cfd5a600f21407748daa7b38cd5e370d868ce10e#nix-update -- --flake cecli --version=skip  # v1.17.0
 
       - name: Update zcode hashes
-        run: nix run nixpkgs#nix-update -- --flake zcode --override-filename modules/zcode/package.nix --version=skip
+        run: nix run github:Mic92/nix-update/cfd5a600f21407748daa7b38cd5e370d868ce10e#nix-update -- --flake zcode --override-filename modules/zcode/package.nix --version=skip  # v1.17.0
 
       - name: Update gsd-core-skills hash
-        run: nix run nixpkgs#nix-update -- --flake gsd-core-skills --override-filename modules/gsd-core-skills/package.nix --version=skip
+        run: nix run github:Mic92/nix-update/cfd5a600f21407748daa7b38cd5e370d868ce10e#nix-update -- --flake gsd-core-skills --override-filename modules/gsd-core-skills/package.nix --version=skip  # v1.17.0
 
       # Commits through the GraphQL API, so GitHub signs it (Verified).
       - name: Commit hash fixes
