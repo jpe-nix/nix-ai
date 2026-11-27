@@ -1,5 +1,17 @@
 # Changelog
 
+## [8.54.0](https://github.com/jpe-nix/nix-ai/compare/v8.53.0...v8.54.0) (2026-11-27)
+
+
+### Features
+
+* **agent-skills:** deploy flock-check for herdr agent status ([#3211](https://github.com/jpe-nix/nix-ai/issues/3211)) ([0ae5a2d](https://github.com/jpe-nix/nix-ai/commit/0ae5a2d1e87716d8df962e2cdfe2523f180b4dfb))
+
+
+### Bug Fixes
+
+* **checks:** drop the frozen merge-base goldens from the default-off facade canary ([#3207](https://github.com/jpe-nix/nix-ai/issues/3207)) ([8f0445c](https://github.com/jpe-nix/nix-ai/commit/8f0445c025728873538082becdcd2a84b96f4a66))
+
 ## [8.53.0](https://github.com/jpe-nix/nix-ai/compare/v8.52.1...v8.53.0) (2026-11-26)
 
 
