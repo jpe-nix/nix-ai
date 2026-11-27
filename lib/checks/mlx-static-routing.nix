@@ -23,14 +23,14 @@ in
 {
   mlx-static-resident-routing =
     if
-      judge.litellm_params.model == "openai/${small9b.model}"
+      judge.litellm_params.model == "custom_openai/${small9b.model}"
       && judge.litellm_params.api_base == "http://127.0.0.1:${toString small9b.servicePort}/v1"
       && judge.litellm_params.timeout == small9b.timeoutSeconds
       && judge.litellm_params.stream_timeout == small9b.timeoutSeconds
       && judge.model_info.max_input_tokens == small9b.maxInputTokens
       && judge.model_info.max_output_tokens == small9b.maxOutputTokens
       && fast.litellm_params.model == judge.litellm_params.model
-      && default.litellm_params.model == "openai/${qwen.model}"
+      && default.litellm_params.model == "custom_openai/${qwen.model}"
       && default.litellm_params.api_base == "http://127.0.0.1:${toString qwen.servicePort}/v1"
       && medium.litellm_params.model == "openai/medium"
       && medium.litellm_params.api_base == "os.environ/LLM_ROUTER_URL"
