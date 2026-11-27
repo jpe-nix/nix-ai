@@ -1,5 +1,13 @@
 # Changelog
 
+## [8.57.0](https://github.com/jpe-nix/nix-ai/compare/v8.56.0...v8.57.0) (2026-11-27)
+
+
+### Features
+
+* **agent:** zcode run j-f18b9219100c6f90 ([c2ffe72](https://github.com/jpe-nix/nix-ai/commit/c2ffe7204dd21af8afc06b4d05a66062e8130c8f))
+* **litellm-local:** add the sensitivity-homelab alias ([#3222](https://github.com/jpe-nix/nix-ai/issues/3222)) ([c2ffe72](https://github.com/jpe-nix/nix-ai/commit/c2ffe7204dd21af8afc06b4d05a66062e8130c8f))
+
 ## [8.56.0](https://github.com/jpe-nix/nix-ai/compare/v8.55.0...v8.56.0) (2026-11-27)
 
 
