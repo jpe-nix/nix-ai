@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.56.0](https://github.com/jpe-nix/nix-ai/compare/v8.55.0...v8.56.0) (2026-11-27)
+
+
+### Features
+
+* **litellm-local:** ask-agent checks a clerk reply against the envelope schema ([#3219](https://github.com/jpe-nix/nix-ai/issues/3219)) ([5f31f35](https://github.com/jpe-nix/nix-ai/commit/5f31f359ffd7966004fd848dcf3659cafeab2a3a))
+
 ## [8.55.0](https://github.com/jpe-nix/nix-ai/compare/v8.54.1...v8.55.0) (2026-11-27)
 
 
