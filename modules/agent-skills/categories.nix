@@ -247,6 +247,8 @@ rec {
   ];
   ai = [
     "herdr"
+    # Read-only status of the other agents in the local herdr server.
+    "flock-check"
     "autoresearch"
     "claude-api"
     "codex-adversarial-review"

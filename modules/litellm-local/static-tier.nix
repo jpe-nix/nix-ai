@@ -77,7 +77,11 @@ let
     {
       model_name = residentName modelId;
       litellm_params = {
-        model = "openai/${modelId}";
+        # custom_openai with chat completions, as the fallback tier's local rung: the openai
+        # provider sends /v1/messages through LiteLLM's Responses bridge, and mlx-lm-server
+        # implements chat completions only, so Anthropic-shaped callers got a 404.
+        model = "custom_openai/${modelId}";
+        use_chat_completions_api = true;
         api_base = "http://127.0.0.1:${toString contract.servicePort}/v1";
         api_key = "os.environ/OPENAI_API_KEY";
         timeout = contract.timeoutSeconds;

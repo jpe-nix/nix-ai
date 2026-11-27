@@ -256,6 +256,10 @@
       url = "github:trailofbits/skills";
       flake = false;
     };
+    flock-check = {
+      url = "github:tonbistudio/flock-check";
+      flake = false;
+    };
 
     # Multi-source social research, ranked by engagement. Cross-tool only.
     last30days-skill = {
