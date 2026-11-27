@@ -1,5 +1,13 @@
 # Changelog
 
+## [8.55.0](https://github.com/jpe-nix/nix-ai/compare/v8.54.1...v8.55.0) (2026-11-27)
+
+
+### Features
+
+* **claude:** add the daymade-claude-code plugin ([#3052](https://github.com/jpe-nix/nix-ai/issues/3052)) ([a9af829](https://github.com/jpe-nix/nix-ai/commit/a9af829a73c125ca6d4e5c7a9d852399ffd53544))
+* **claude:** add the daymade-claude-code plugin for session history and continuation ([a9af829](https://github.com/jpe-nix/nix-ai/commit/a9af829a73c125ca6d4e5c7a9d852399ffd53544))
+
 ## [8.54.1](https://github.com/jpe-nix/nix-ai/compare/v8.54.0...v8.54.1) (2026-11-27)
 
 
