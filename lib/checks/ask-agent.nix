@@ -57,6 +57,7 @@ assert
           pkgs.coreutils
           pkgs.curl
           pkgs.gnugrep
+          pkgs.jq
           pkgs.python3
           pkgs.shellcheck
         ];
@@ -79,6 +80,11 @@ assert
         import http.server, json, pathlib, re, socket, socketserver, sys
 
         work = pathlib.Path(sys.argv[1])
+        envelope = json.dumps({
+            "status": "ok", "outcome": "Found one task.", "ids": ["12"],
+            "items": [{"id": 12, "title": "Sample"}], "readback": None, "error": None,
+        })
+        replies = {"hello world": "mock reply", "envelope": envelope, "prose": "Done."}
         loopback = socket.inet_ntoa(socket.INADDR_LOOPBACK.to_bytes(4, "big"))
 
         class Server(http.server.HTTPServer):
@@ -97,13 +103,13 @@ assert
                     status = 400
                     payload = {"error": {"message": "unexpected request path"}}
                 elif (
-                    request["model"] != "agent-demo"
+                    request["model"] not in ("agent-demo", "agent-demo-clerk")
                     or len(content) != 2
                     or re.fullmatch(
                         r"\[caller: [^;]+; request: [0-9]+-[0-9]+-[0-9]+\]",
                         content[0],
                     ) is None
-                    or content[1] not in ("hello world", "rate-limit")
+                    or content[1] not in (*replies, "rate-limit")
                 ):
                     status = 400
                     payload = {"error": {"message": "unexpected request body"}}
@@ -112,7 +118,7 @@ assert
                     payload = {"error": {"message": "rate limited"}}
                 else:
                     status = 200
-                    payload = {"choices": [{"message": {"content": "mock reply"}}]}
+                    payload = {"choices": [{"message": {"content": replies[content[1]]}}]}
                 body = json.dumps(payload).encode()
                 self.send_response(status)
                 self.send_header("content-type", "application/json")
@@ -157,6 +163,30 @@ assert
               cat "$work/429.err" >&2
               exit 1
             }
+
+            # A clerk's reply must be one clerk envelope; prose is replaced by an error envelope.
+            envelope="$(ASK_AGENT_URL="$base" ${askAgent}/bin/ask-agent demo-clerk envelope)"
+            [ "$(jq -r '.status + " " + .ids[0]' <<<"$envelope")" = "ok 12" ] || {
+              echo "ask-agent changed a valid clerk envelope: $envelope" >&2
+              exit 1
+            }
+
+            status=0
+            ASK_AGENT_URL="$base" ${askAgent}/bin/ask-agent demo-clerk prose >"$work/prose.out" 2>"$work/prose.err" || status=$?
+            [ "$status" = 2 ] || {
+              echo "ask-agent exited $status for a malformed clerk reply, expected 2" >&2
+              cat "$work/prose.err" >&2
+              exit 1
+            }
+            [ "$(jq -r '.status + " " + .error.code' "$work/prose.out")" = "error malformed_envelope" ] || {
+              echo "ask-agent did not print the malformed_envelope error envelope" >&2
+              cat "$work/prose.out" >&2
+              exit 1
+            }
+            grep -qF "not a clerk envelope: Done." "$work/prose.err"
+
+            # Prose from an agent that is not a clerk passes through unchanged.
+            [ "$(ASK_AGENT_URL="$base" ${askAgent}/bin/ask-agent demo prose)" = "Done." ]
 
             touch "$out"
       '';
