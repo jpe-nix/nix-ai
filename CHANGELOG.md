@@ -1,5 +1,17 @@
 # Changelog
 
+## [8.58.0](https://github.com/jpe-nix/nix-ai/compare/v8.57.1...v8.58.0) (2026-11-27)
+
+
+### Features
+
+* **agent:** zcode run j-76fcc875b2a5563d ([f9bc168](https://github.com/jpe-nix/nix-ai/commit/f9bc1688ff00531f6225b21c13e1d54dbed81471))
+
+
+### Bug Fixes
+
+* **deps:** align the uv release-age window with the three-day rule ([#3229](https://github.com/jpe-nix/nix-ai/issues/3229)) ([f9bc168](https://github.com/jpe-nix/nix-ai/commit/f9bc1688ff00531f6225b21c13e1d54dbed81471))
+
 ## [8.57.1](https://github.com/jpe-nix/nix-ai/compare/v8.57.0...v8.57.1) (2026-11-27)
 
 
