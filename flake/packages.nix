@@ -45,6 +45,12 @@ forAllSystems (
     zcode = zcodePkg;
     zcode-web = pkgs.callPackage ../modules/zcode/web.nix { zcode = zcodePkg; };
     inherit (cecliPkg.passthru) mcp;
+    # Exposed so the hash-update workflow can address each wheel by name.
+    inherit (import ../modules/mcp/packages.nix { inherit pkgs; })
+      fabric-mcp
+      mcp-server-time
+      huggingface-mcp-server
+      ;
     inherit (vctCliPkgs) vct-cribl-cli vct-splunk-cli;
   }
   // nixpkgs.lib.optionalAttrs (system == "aarch64-darwin") {
