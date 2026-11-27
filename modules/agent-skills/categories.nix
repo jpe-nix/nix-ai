@@ -51,6 +51,7 @@ rec {
     "delegate-to-ai"
     "frontend-design"
     "goal"
+    "goal-prompt"
     # Delegation mechanics are universal: every repository's session has bulk
     # reads to hand off, and a skill only this session can reach is a skill
     # nothing delegates through.
@@ -73,6 +74,45 @@ rec {
     "session-status"
     "skills-registry"
     "track-followups"
+  ];
+
+  # agentops (boshu2/agentops) skills every harness lists. Claude Code gets
+  # them through the agentops plugin as /agentops:<name>. Where a name is
+  # also shipped by another input (implement, research, triage, test,
+  # skill-builder), the agentops skill is the one deployed.
+  agentops-core = [
+    "agy-native"
+    "claude-exec"
+    "codex-exec"
+    "council"
+    "craft-goal"
+    "doc"
+    "idea-genie"
+    "implement"
+    "interview"
+    "orchestrate"
+    "plan"
+    "postmortem"
+    "research"
+    "review"
+    "test"
+    "triage"
+    "validate"
+  ];
+
+  # Skills a host leaves out of its global tree (activeGroups without
+  # `on-demand`). A repository that needs them declares `on-demand` in its
+  # AGENTS.md skill-groups and gets them linked on direnv load.
+  on-demand = [
+    "architecture"
+    "domain"
+    "ergonomics"
+    "memory"
+    "navigate"
+    "premortem"
+    "refactor"
+    "rpi"
+    "security"
   ];
 
   # Branching, PRs, releases, CI troubleshooting.
@@ -140,6 +180,7 @@ rec {
     "skill-builder"
     "skill-creator"
     "skill-development"
+    "skill-eval"
     "validate-readme"
     "writing-rules"
   ];

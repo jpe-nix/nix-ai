@@ -5,6 +5,11 @@
 # skills linked into ~/.claude/skills in every session. Adding a skill source
 # means adding one entry here — every consumer reads this table.
 {
+  agentops-marketplace = {
+    input = "agentops";
+    skills = "all";
+    claude = [ ];
+  };
   anthropic-agent-skills = {
     input = "anthropic-agent-skills";
     skills = [
@@ -195,6 +200,11 @@
   superpowers-marketplace = {
     input = "superpowers-marketplace";
     skills = "all";
+    claude = [ ];
+  };
+  trailofbits-skills = {
+    input = "trailofbits-skills";
+    skills = [ "goal-prompt" ];
     claude = [ ];
   };
   vct-cribl-pack-validator-skills = {
