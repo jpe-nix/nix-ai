@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.58.1](https://github.com/jpe-nix/nix-ai/compare/v8.58.0...v8.58.1) (2026-11-27)
+
+
+### Bug Fixes
+
+* **mcp:** let the hash-update workflow refresh the MCP wheel hashes ([#3232](https://github.com/jpe-nix/nix-ai/issues/3232)) ([851e676](https://github.com/jpe-nix/nix-ai/commit/851e67678920333432194f801534f56b356acd33))
+
 ## [8.58.0](https://github.com/jpe-nix/nix-ai/compare/v8.57.1...v8.58.0) (2026-11-27)
 
 
