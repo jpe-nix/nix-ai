@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.57.1](https://github.com/jpe-nix/nix-ai/compare/v8.57.0...v8.57.1) (2026-11-27)
+
+
+### Bug Fixes
+
+* **ci:** run the Renovate hash fixes with pinned nix-update 1.17.0 ([#3225](https://github.com/jpe-nix/nix-ai/issues/3225)) ([a52e505](https://github.com/jpe-nix/nix-ai/commit/a52e505ab35d2b933d8e7eb2dc152ea407423a11))
+
 ## [8.57.0](https://github.com/jpe-nix/nix-ai/compare/v8.56.0...v8.57.0) (2026-11-27)
 
 
