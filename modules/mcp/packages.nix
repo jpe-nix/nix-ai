@@ -30,22 +30,6 @@ let
   versions = import ../../lib/versions.nix;
   py = pkgs.python3Packages;
 
-  # Hashes for the py3-none-any wheels, keyed by the version in versions.nix.
-  # Regenerate with `nix-prefetch-url` (or read PyPI's JSON) when bumping.
-  hashes = {
-    modelcontextprotocol."1.0.1" = "sha256-py2wHSblDtTak178rtwVG4nf+T4abWuRYW20xEPKLv0=";
-    fabric-mcp."1.3.4" = "sha256-d4f1CQ983jkieW9Dfx11luJeJ1IPOXTB2kk15DVJdV0=";
-    fabric-mcp."1.3.7" = "sha256-6Cvq7zO1Tt57aB884lywFoH1EhKZBLS2DnUDKaEJ6wA=";
-    huggingface-mcp-server."0.1.0" = "sha256-HpMuEGDX4A5KQiU8P7RCmePnxDBb11uj3fnWYOzv2Ak=";
-    mcp-server-time."2026.10.28" = "sha256-S4oYZejEXaLSJH5yyoPqCH5ci8WXycqTxj6RA660bDE=";
-    mcp-server-time."2026.11.4" = "sha256-U2OI/G8ZreyEXw06GU1pasoyYKYmwEHLl6mYjhoYREo=";
-  };
-
-  hashFor =
-    pname: version:
-    hashes.${pname}.${version}
-      or (throw "mcp/packages.nix: no wheel hash for ${pname} ${version}. Add it to `hashes` (the py3-none-any wheel on PyPI).");
-
   # PyPI serves wheel FILES under the underscored form of the project name,
   # while the project itself is hyphenated. fetchPypi uses `pname` for both the
   # URL directory and the filename, so it must get the underscored form or the
@@ -74,6 +58,9 @@ let
       # check enforces the metadata, not actual behaviour, so it is disabled
       # and the servers are verified by loading in a real session instead.
       importCheck ? [ ],
+      # The hash-update workflow rewrites this literal. The fetch URL names the
+      # version, so a stale literal fails the fetch and never yields another wheel.
+      hash,
     }:
     py.buildPythonApplication {
       inherit pname version;
@@ -86,7 +73,7 @@ let
         python = "py3";
         abi = "none";
         platform = "any";
-        hash = hashFor pname version;
+        inherit hash;
       };
       propagatedBuildInputs = deps;
       dontCheckRuntimeDeps = true;
@@ -106,7 +93,7 @@ let
       python = "py3";
       abi = "none";
       platform = "any";
-      hash = hashFor "modelcontextprotocol" "1.0.1";
+      hash = "sha256-py2wHSblDtTak178rtwVG4nf+T4abWuRYW20xEPKLv0=";
     };
     propagatedBuildInputs = with py; [
       click
@@ -124,6 +111,7 @@ in
   fabric-mcp = wheelApp {
     pname = "fabric-mcp";
     version = versions.fabricMcp;
+    hash = "sha256-6Cvq7zO1Tt57aB884lywFoH1EhKZBLS2DnUDKaEJ6wA=";
     deps =
       (with py; [
         click
@@ -142,6 +130,7 @@ in
   mcp-server-time = wheelApp {
     pname = "mcp-server-time";
     version = versions.mcpServerTime;
+    hash = "sha256-S4oYZejEXaLSJH5yyoPqCH5ci8WXycqTxj6RA660bDE=";
     deps = with py; [
       mcp
       pydantic
@@ -153,6 +142,7 @@ in
   huggingface-mcp-server = wheelApp {
     pname = "huggingface-mcp-server";
     version = versions.hfMcpServer;
+    hash = "sha256-HpMuEGDX4A5KQiU8P7RCmePnxDBb11uj3fnWYOzv2Ak=";
     deps = with py; [
       huggingface-hub
       mcp
