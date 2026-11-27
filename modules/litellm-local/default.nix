@@ -48,6 +48,7 @@
   pkgs,
   lib,
   userConfig,
+  ai-llm-prompts,
   ...
 }:
 let
@@ -172,6 +173,7 @@ let
   # The launchd entry point plus the two operator commands.
   commands = import ./commands.nix {
     inherit
+      ai-llm-prompts
       aliases
       pkgs
       lib

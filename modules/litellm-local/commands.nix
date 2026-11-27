@@ -11,6 +11,7 @@
 # start script reads the token file at exec time when configured, or requires
 # `OPENAI_API_KEY` from the launch prefix when the consumer provisions it.
 {
+  ai-llm-prompts,
   aliases,
   pkgs,
   lib,
@@ -55,11 +56,13 @@ let
     name = "ask-agent";
     runtimeInputs = [
       pkgs.bash
+      pkgs.check-jsonschema
       pkgs.coreutils
       pkgs.curl
       pkgs.jq
     ];
     text = ''
+      ASK_AGENT_CLERK_SCHEMA=${ai-llm-prompts + "/agents/schemas/clerk-envelope.schema.json"} \
       LITELLM_LOCAL_URL=${lib.escapeShellArg (lib.removeSuffix "/v1" aiStack.localRouterUrl)} \
         exec bash ${./../scripts/ask-agent.sh} "$@"
     '';

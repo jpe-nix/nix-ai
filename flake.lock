@@ -42,11 +42,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794625557,
-        "narHash": "sha256-2yh17GBrQyCOSQSsu8Invfnj4ZjxzG5ultLXtVgqxFs=",
+        "lastModified": 1795766507,
+        "narHash": "sha256-3MuLhc8ymoz/3WAEP/d0UG1QGCrZrXl5jnrIbpuVQtg=",
         "owner": "jpe-ai-agents",
         "repo": "ai-llm-prompts",
-        "rev": "8b3cde6e03b6fed504acb1e8399713b632922d14",
+        "rev": "2dd15548c67a09a3b61d55e11b292e2f033680bb",
         "type": "github"
       },
       "original": {
