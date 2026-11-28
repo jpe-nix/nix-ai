@@ -64,6 +64,12 @@ rec {
     "find-skills"
     "handoff"
     "native-first"
+    # Herdr pane messaging and Sheprd's browser, automation and mod skills,
+    # which every session uses to reach the other agents.
+    "herdr"
+    "herdr-automations"
+    "herdr-gpui-browser"
+    "herdr-mods"
     # Third-party Orca skills required in every global session.
     "orca-cli"
     "orca-emulator"
