@@ -185,6 +185,11 @@
       url = "github:stablyai/orca";
       flake = false;
     };
+    # Sheprd's agent skills (skills/<name>/SKILL.md).
+    sheprd-skills = {
+      url = "github:sheprd-labs/sheprd";
+      flake = false;
+    };
 
     # Chrome team web-platform guidance (HTML/CSS/client JS). Only the
     # modern-web-guidance skill is deployed; see modules/agent-skills/default.nix.

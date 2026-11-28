@@ -195,6 +195,11 @@ in
       ) sourceTable.orca-skills.skills
       || throw "Selected Orca skills not discovered from the targeted Orca input";
     assert
+      builtins.all (
+        name: builtins.elem ".codex/skills/${name}" managedSkillEntries
+      ) sourceTable.sheprd-skills.skills
+      || throw "Selected Sheprd skills not discovered from the sheprd-skills input";
+    assert
       !(builtins.elem ".codex/skills/orca-emulator-android" managedSkillEntries)
       || throw "Orca Android emulator skill deployed although it was not selected";
     assert
@@ -243,6 +248,9 @@ in
     assert
       builtins.elem ".agents/skills/orca-cli" sharedHomeFileNames
       || throw "Agent Skills agents root is missing orca-cli";
+    assert
+      builtins.elem ".agents/skills/herdr-mods" sharedHomeFileNames
+      || throw "Agent Skills agents root is missing herdr-mods";
     assert
       pkgs.lib.hasInfix "/nix/store/*-home-manager-files/.codex/skills/*" inactiveRootCleanup
       || throw "Agent Skills agents root must clean stale Home Manager links from the inactive Codex root";

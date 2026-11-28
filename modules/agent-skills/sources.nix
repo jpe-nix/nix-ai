@@ -194,6 +194,19 @@
     skills = "all";
     claude = [ ];
   };
+  sheprd-skills = {
+    input = "sheprd-skills";
+    skills = [
+      "herdr-automations"
+      "herdr-gpui-browser"
+      "herdr-mods"
+    ];
+    claude = [
+      "herdr-automations"
+      "herdr-gpui-browser"
+      "herdr-mods"
+    ];
+  };
   sre-skills = {
     input = "sre-skills";
     skills = [
