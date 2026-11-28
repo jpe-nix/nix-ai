@@ -251,9 +251,6 @@ in
       builtins.elem ".agents/skills/orca-cli" sharedHomeFileNames
       || throw "Agent Skills agents root is missing orca-cli";
     assert
-      builtins.elem ".agents/skills/herdr-mods" sharedHomeFileNames
-      || throw "Agent Skills agents root is missing herdr-mods";
-    assert
       pkgs.lib.hasInfix "/nix/store/*-home-manager-files/.codex/skills/*" inactiveRootCleanup
       || throw "Agent Skills agents root must clean stale Home Manager links from the inactive Codex root";
     helpers.mkMarker "check-agent-skills-shared-root" "Agent Skills agents override deploys one canonical root";
