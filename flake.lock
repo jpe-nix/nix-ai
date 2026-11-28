@@ -1712,6 +1712,7 @@
         "nixpkgs-unstable": "nixpkgs-unstable",
         "orca-skills": "orca-skills",
         "ponytail": "ponytail",
+        "sheprd-skills": "sheprd-skills",
         "sre-skills": "sre-skills",
         "token-meter-src": "token-meter-src",
         "trailofbits-skills": "trailofbits-skills",
@@ -1761,6 +1762,22 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "sheprd-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1795823988,
+        "narHash": "sha256-ioGeySFgvbUCL8aXtopv7c+0OHdbRzJpTe/cJA1alVE=",
+        "owner": "sheprd-labs",
+        "repo": "sheprd",
+        "rev": "555326cc7adbee6067c393fbfe7f8fcbf29ca80c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sheprd-labs",
+        "repo": "sheprd",
         "type": "github"
       }
     },
