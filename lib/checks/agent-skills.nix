@@ -88,7 +88,9 @@ in
       {
         name = "agentSkills.claudeAlwaysListed";
         actual = builtins.sort builtins.lessThan cfg.claudeAlwaysListed;
-        expected = builtins.sort builtins.lessThan claudeSourceSkillNames;
+        expected = builtins.sort builtins.lessThan (
+          claudeSourceSkillNames ++ pkgs.lib.optional hmConfig.config.programs.herdr.enable "herdr"
+        );
       }
       # The names above resolving to nothing is the silent failure: the option
       # still reads correctly while ~/.claude/skills stays empty and Claude
