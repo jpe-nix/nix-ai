@@ -1,8 +1,8 @@
 # nix-ai
 
-[![CI](https://github.com/dryvist/nix-ai/actions/workflows/ci-gate.yml/badge.svg)](https://github.com/dryvist/nix-ai/actions/workflows/ci-gate.yml)
-[![Release](https://img.shields.io/github/v/release/dryvist/nix-ai?sort=semver)](https://github.com/dryvist/nix-ai/releases)
-[![License](https://img.shields.io/github/license/dryvist/nix-ai)](LICENSE)
+[![CI Gate](https://github.com/jpe-nix/nix-ai/actions/workflows/ci-gate.yml/badge.svg)](https://github.com/jpe-nix/nix-ai/actions/workflows/ci-gate.yml)
+[![Release](https://img.shields.io/github/v/release/jpe-nix/nix-ai?sort=semver)](https://github.com/jpe-nix/nix-ai/releases)
+[![License](https://img.shields.io/github/license/jpe-nix/nix-ai)](LICENSE)
 [![Built with Nix](https://img.shields.io/badge/built%20with-Nix-5277C3?logo=nixos&logoColor=white)](https://nixos.org/)
 
 ## Your AI coding toolkit, declared once. Reproduced everywhere
