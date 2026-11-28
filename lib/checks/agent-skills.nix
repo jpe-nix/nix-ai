@@ -88,7 +88,9 @@ in
       {
         name = "agentSkills.claudeAlwaysListed";
         actual = builtins.sort builtins.lessThan cfg.claudeAlwaysListed;
-        expected = builtins.sort builtins.lessThan claudeSourceSkillNames;
+        expected = builtins.sort builtins.lessThan (
+          claudeSourceSkillNames ++ pkgs.lib.optional hmConfig.config.programs.herdr.enable "herdr"
+        );
       }
       # The names above resolving to nothing is the silent failure: the option
       # still reads correctly while ~/.claude/skills stays empty and Claude
@@ -194,6 +196,11 @@ in
         name: builtins.elem ".codex/skills/${name}" managedSkillEntries
       ) sourceTable.orca-skills.skills
       || throw "Selected Orca skills not discovered from the targeted Orca input";
+    assert
+      builtins.all (
+        name: builtins.elem ".codex/skills/${name}" managedSkillEntries
+      ) sourceTable.sheprd-skills.skills
+      || throw "Selected Sheprd skills not discovered from the sheprd-skills input";
     assert
       !(builtins.elem ".codex/skills/orca-emulator-android" managedSkillEntries)
       || throw "Orca Android emulator skill deployed although it was not selected";

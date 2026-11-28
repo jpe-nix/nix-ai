@@ -43,5 +43,10 @@
     programs.agentSkills.local.herdr = lib.mkIf (
       config.programs.herdr.enable && config.programs.herdr.package != null
     ) "${config.programs.herdr.package}/share/skills/herdr/herdr/SKILL.md";
+    # Claude Code reads only ~/.claude/skills, so the pane-messaging skill is
+    # linked there too. mkOptionDefault merges with the sources.nix defaults.
+    programs.agentSkills.claudeAlwaysListed = lib.mkIf (
+      config.programs.herdr.enable && config.programs.herdr.package != null
+    ) (lib.mkOptionDefault [ "herdr" ]);
   };
 }
