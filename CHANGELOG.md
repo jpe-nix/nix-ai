@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.59.0](https://github.com/jpe-nix/nix-ai/compare/v8.58.1...v8.59.0) (2026-11-28)
+
+
+### Features
+
+* **agent-skills:** deploy Herdr and Sheprd skills to every session ([#3236](https://github.com/jpe-nix/nix-ai/issues/3236)) ([9519edf](https://github.com/jpe-nix/nix-ai/commit/9519edfd19d00a3771a72e6243af0938e9d1905b))
+
 ## [8.58.1](https://github.com/jpe-nix/nix-ai/compare/v8.58.0...v8.58.1) (2026-11-27)
 
 
